@@ -15,3 +15,17 @@ The idea of fetching data about local businesses deals with CRUD concept. The pr
 
 
 
+I NEED HELP ON THE FOLLOWING PLEASE: There are 3 relational tables that I am trying to use in this project. I feel like I am not having a right logic or I do not have an enough idea on it. For the stores table, all the data come from an API, all I need to do is extract them, meaning it is dynamic. DO I NEED THE TABLE NAMED sotres? Your advice please. <br>
+My plan is to remove address, phone number, average_price_per_item, hour of operations, and delivery_option attributes from stores table and render them in a detail page for a specific store when a user clicks on the link for that specific store. Once I finalize on this with your help, I will generate ER diagram using PgAdmin
+<br>
+
+users &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;stores &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; favorite_stores <br>
+id[pk]&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id[pk]&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;id[pk] <br>
+f_name  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  name  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; name <br>
+l_name   &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  address    <br>
+password &nbsp;&nbsp; &nbsp; phone number  <br>
+image_url &nbsp;&nbsp; &nbsp; &nbsp;user_id       <br>
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &nbsp;  &nbsp; &nbsp; &nbsp;  fav_store_id    <br>
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  average_price_per_item   <br>
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delivery_option         <br>
+
