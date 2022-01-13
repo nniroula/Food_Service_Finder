@@ -30,3 +30,14 @@ last_name   &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 password &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
 phone number&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
 image_url &nbsp;&nbsp; &nbsp;
+<br>
+<br>
+
+### To simulate the project from scratch:
+1. Create a directory, run the commands python3 -m venv venv, source venv/bin/activate, pip install flask
+
+2. To run the server, flask run, or FLASK_APP = my_file.py flask run if your file is named my_file rather than app
+
+3. User jinja templating for template(html file) inheritance, and using templating
+4. Update dependencies to requirements.txt file with the command, pip freeze > requirements.txt(this makes requirements.txt)<br>
+    Use the command, cat requirements.txt to look up content in requirements.txt file 
