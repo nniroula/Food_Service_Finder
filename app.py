@@ -12,7 +12,7 @@ debug = DebugToolbarExtension(app)
 @app.route('/first')
 def base_route():
     # return "Started Capstone Project"
-    return render_template('index.html')
+    return render_template('base.html')
 
 # @app.route('/signup')
 # def signup():
