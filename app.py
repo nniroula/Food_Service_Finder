@@ -26,9 +26,9 @@ def landing_page():
 
 
 ######################################################################################################
-""" External API """
-api_key = API_SECRET_KEY
+""" External API Access and data retrieval """
 
+api_key = API_SECRET_KEY
 BASE_URL = 'https://api.yelp.com/v3'
 BUSINESS_ENDPOINT = '/businesses/search'
 
