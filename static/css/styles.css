@@ -1,0 +1,20 @@
+
+div #nav-bar{
+    background-color:greenyellow;
+}
+.links{
+   /* padding: 20px; */
+   padding-left: 20px;
+   padding-right: 10px;
+   /* float aligns the content to right */
+   float:right 
+}
+
+.land-page{
+    text-align: center;
+    color:tomato;
+    padding-top: 30vh;
+}
+h1{
+    background-color: turquoise;
+}
