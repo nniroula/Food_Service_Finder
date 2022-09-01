@@ -160,11 +160,47 @@ def show_details_about_restaurant(restaurant_id):
     closing_time_of_tuesday = tuesday_hours['end']
     business_hours_of_tuesday = opening_time_of_tuesday + ' - ' + closing_time_of_tuesday
 
+    # wednesday
+    wednesday_hours = list_of_hours_for_seven_days[2]
+    opening_time_of_wednesday = wednesday_hours['start']
+    closing_time_of_wednesday = wednesday_hours['end']
+    business_hours_of_wednesday = opening_time_of_wednesday + ' - ' + closing_time_of_wednesday
+
+    # Thursday
+    thursday_hours = list_of_hours_for_seven_days[3]
+    opening_time_of_thursday = thursday_hours['start']
+    closing_time_of_thursday = thursday_hours['end']
+    business_hours_of_thursday = opening_time_of_thursday + ' - ' + closing_time_of_thursday
+
+    # Friday
+    friday_hours = list_of_hours_for_seven_days[4]
+    opening_time_of_friday = friday_hours['start']
+    closing_time_of_friday = friday_hours['end']
+    business_hours_of_friday = opening_time_of_friday + ' - ' + closing_time_of_friday
+
+    # Saturday
+    saturday_hours = list_of_hours_for_seven_days[5]
+    opening_time_of_saturday = saturday_hours['start']
+    closing_time_of_saturday = saturday_hours['end']
+    business_hours_of_saturday = opening_time_of_saturday + ' - ' + closing_time_of_saturday
+
+    # Sunday
+    sunday_hours = list_of_hours_for_seven_days[6]
+    opening_time_of_sunday = sunday_hours['start']
+    closing_time_of_sunday = sunday_hours['end']
+    business_hours_of_sunday = opening_time_of_sunday + ' - ' + closing_time_of_sunday
+
+
     return render_template('restaurant-details.html', 
                             store_data = store_data,
                             address =  address_to_string,
                             business_hours_of_monday = business_hours_of_monday,
-                            business_hours_of_tuesday = business_hours_of_tuesday 
+                            business_hours_of_tuesday = business_hours_of_tuesday,
+                            business_hours_of_wednesday = business_hours_of_wednesday,
+                            business_hours_of_thursday = business_hours_of_thursday,
+                            business_hours_of_friday = business_hours_of_friday,
+                            business_hours_of_saturday = business_hours_of_saturday,
+                            business_hours_of_sunday = business_hours_of_sunday
                         )
     
    
