@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Service Providers</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Food Service Providers</title>
+    </head>
     <body>
         {% if length_of_suggested_stores == 0 %}
             <p>Suggested Restaurant(s): </p>
@@ -19,7 +19,8 @@
             <p>Suggested Restaurant(s): </p>
             {% for store in suggested_stores %}
             <ul>
-                <li>{{ store }}</li> 
+                <!-- <li>{{ store }}</li>  -->
+               <li>  <a href="{{ store }}">{{ store }}</a></li> 
             </ul>
             {% endfor %}
 
@@ -37,7 +38,8 @@
             <p>More Restaurant(s) to explore: </p>
             {% for store in other_stores %}
             <ul>
-                <li>{{ store }}</li> 
+                <!-- <li>{{ store }}</li>  -->
+                <li>  <a href="{{ store }}">{{ store }}</a></li> 
             </ul>
             {% endfor %}
             

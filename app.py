@@ -48,7 +48,7 @@ def home():
     return render_template('city-form.html')
 
 
-@app.route('/city')
+@app.route('/restaurants')
 def show_food_service_providers_from_api():
     """ Take in user input of the city and render all food stores from the external api in the browser based on the user input """
 
