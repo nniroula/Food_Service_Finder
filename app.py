@@ -38,33 +38,70 @@ def home():
 
 
 @app.route('/city')
-def show_all_food_service_providers_from_api():
+def show_food_service_providers_from_api():
     """ Take in user input of the city and render all food stores from the external api in the browser based on the user input """
 
+    """ """
     headers= {"Authorization": f"Bearer {api_key}" }
     city_name = request.args['city']  # not requests, get user input from the browser
 
-    # API_URL =  f'https://api.yelp.com/v3/businesses/search?location={city_name}'
-    NEEDED_API_URL =  f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}'
+    # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
+    # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}'
+    NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}&term=Restaurant'
 
     api_response = requests.get(NEEDED_API_URL, headers= headers)
     api_data = api_response.json() # returns data in json format
     data_object = api_data['businesses']
 
-    for val in data_object:
+    #  list to hold stores
+    suggested_stores = []
+    other_stores_to_explore = []
+
+    # for val in data_object:
+    for store in data_object:
         print('#################################################################')
-        print(val['name'])
-        print(val['is_closed'])
-        print(val['display_phone'])
-        address = val['location'][ 'display_address'] # returns an array(list)
+        print(store['name'])
+        print(store['is_closed'])
+        print(store['display_phone'])
+        address = store['location'][ 'display_address'] # returns an array(list)
         address_to_string = ' '.join(address)
         print(address_to_string)
-        print(val['rating'])
+        print(store['rating'])
 
-    return render_template('food_providers.html', data_object = data_object)
+        if(store['rating'] >= 2.5):
+            suggested_stores.append(store['name'])
+        else:
+            other_stores_to_explore.append(store['name'])
+        
+        # length_of_suggested_stores = len(suggested_stores)
+        # length_of_other_stores = len(other_stores_to_explore)
+    length_of_suggested_stores = len(suggested_stores)
+    length_of_other_stores = len(other_stores_to_explore)
+
+    # return render_template('food_providers.html', data_object = data_object)
+    return render_template('food_providers.html', suggested_stores = suggested_stores, other_stores = other_stores_to_explore,  
+                            length_of_suggested_stores =  length_of_suggested_stores,
+                            length_of_other_stores = length_of_other_stores
+                            )
 
 
 ################################################################################
 
 
    
+# headers= {"Authorization": f"Bearer {api_key}" }
+# NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
+
+# api_response = requests.get(NEEDED_API_URL, headers= headers)
+# api_data = api_response.json() # returns data in json format
+# data_object = api_data['businesses']
+
+# for val in data_object:
+#     print('#################################################################')
+#     print(val['name'])
+#     print(val['is_closed'])
+#     print(val['display_phone'])
+#     address = val['location'][ 'display_address'] # returns an array(list)
+#     address_to_string = ' '.join(address)
+#     print(address_to_string)
+#     print(val['rating'])

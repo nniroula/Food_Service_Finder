@@ -7,13 +7,53 @@
     <title>Food Service Providers</title>
 </head>
     <body>
+        <!-- {% for store in suggested_stores %}
+        <ul>
+            <li>{{ store }}</li> 
+        </ul>
+        {% endfor %} -->
 
-        {% for store in data_object%}
+        <!-- {% for store in data_object %}
             <ul>
-                <li>{{ store['name'] }}</li>
+                <li>{{ store['name'] }}</li> 
             </ul>
+        {% endfor %} -->
 
-        {% endfor %}
+
+        {% if length_of_suggested_stores == 0 %}
+            <p>Suggested Store(s): </p>
+                <!-- &nbsp; &nbsp; &nbsp; &nbsp; <p>No store suggestion at this time</p> -->
+                <ul>
+                    <li>
+                        <p>No store suggestion at this time</p>
+                    </li>
+                </ul>
+        
+        {% else %}
+            <p>Suggested Store(s): </p>
+            {% for store in suggested_stores %}
+            <ul>
+                <li>{{ store }}</li> 
+            </ul>
+            {% endfor %}
+        {% endif %}
+
+        {% if length_of_other_stores == 0 %}
+            <p>More store(s) to explore: </p>
+                <ul>
+                    <li>
+                        <p>No store suggestion at this time</p>
+                    </li>
+                </ul>
+    
+        {% else %}
+            <p>More store(s) to explore: </p>
+            {% for store in other_stores %}
+            <ul>
+                <li>{{ store }}</li> 
+            </ul>
+            {% endfor %}
+        {% endif %}
 
     </body>
 </html>
