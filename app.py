@@ -45,20 +45,17 @@ def show_food_service_providers_from_api():
     headers= {"Authorization": f"Bearer {api_key}" }
     city_name = request.args['city']  # not requests, get user input from the browser
 
-    # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
-    # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}'
     NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}&term=Restaurant'
 
     api_response = requests.get(NEEDED_API_URL, headers= headers)
     api_data = api_response.json() # returns data in json format
-    data_object = api_data['businesses']
+    api_store_lists_object = api_data['businesses']
 
     #  list to hold stores
     suggested_stores = []
     other_stores_to_explore = []
 
-    # for val in data_object:
-    for store in data_object:
+    for store in api_store_lists_object:
         print('#################################################################')
         print(store['name'])
         print(store['is_closed'])
@@ -73,16 +70,15 @@ def show_food_service_providers_from_api():
         else:
             other_stores_to_explore.append(store['name'])
         
-        # length_of_suggested_stores = len(suggested_stores)
-        # length_of_other_stores = len(other_stores_to_explore)
     length_of_suggested_stores = len(suggested_stores)
     length_of_other_stores = len(other_stores_to_explore)
 
-    # return render_template('food_providers.html', data_object = data_object)
-    return render_template('food_providers.html', suggested_stores = suggested_stores, other_stores = other_stores_to_explore,  
+    return render_template('food_providers.html', 
+                            suggested_stores = suggested_stores, 
+                            other_stores = other_stores_to_explore,  
                             length_of_suggested_stores =  length_of_suggested_stores,
                             length_of_other_stores = length_of_other_stores
-                            )
+                        )
 
 
 ################################################################################
