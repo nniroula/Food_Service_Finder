@@ -24,6 +24,20 @@ def base_route():
 def landing_page():
     return render_template('landing_page.html')
 
+######################################################################################################
+
+""" Geneeal purpose functions """
+import random
+
+def generate_random_list_of_items(arrayOfItems):
+    """ generates a list of 12 randomly selected items from a list """
+
+    # length_of_arrayOfItems = len(arrayOfItems)
+
+    list_of_twelve_random_items = random.sample(arrayOfItems, 12)
+    return list_of_twelve_random_items
+
+
 
 ######################################################################################################
 """ External API Access and data retrieval """
@@ -65,13 +79,33 @@ def show_food_service_providers_from_api():
         print(address_to_string)
         print(store['rating'])
 
-        if(store['rating'] >= 2.5):
+        if(store['rating'] >= 5.5):
             suggested_stores.append(store['name'])
         else:
             other_stores_to_explore.append(store['name'])
         
     length_of_suggested_stores = len(suggested_stores)
     length_of_other_stores = len(other_stores_to_explore)
+
+    ######################################################
+    """ use random geneator function """
+
+    # generate 12 random restaurants
+    if(length_of_suggested_stores > 12):
+        list_of_randomly_selected_suggested_restaurants = generate_random_list_of_items(suggested_stores)
+        #  empty the suggested stores array, and append the new values
+        suggested_stores.clear()
+        for restaurant in list_of_randomly_selected_suggested_restaurants:
+            suggested_stores.append(restaurant)
+    
+    if(length_of_other_stores >12):
+        list_of_randomly_selected_other_restaurants = generate_random_list_of_items(other_stores_to_explore)
+         #  empty the suggested stores array, and append the new values
+        other_stores_to_explore.clear()
+        for restaurant in list_of_randomly_selected_other_restaurants:
+            other_stores_to_explore.append(restaurant)
+
+    ######################################################
 
     return render_template('food_providers.html', 
                             suggested_stores = suggested_stores, 
