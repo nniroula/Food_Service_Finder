@@ -48,6 +48,11 @@ def home():
     return render_template('city-form.html')
 
 
+# global variables
+# suggested_stores = []
+# other_stores_to_explore = []
+
+
 @app.route('/restaurants')
 def show_food_service_providers_from_api():
     """ Take in user input of the city and render all food stores from the external api in the browser based on the user input """
@@ -59,20 +64,37 @@ def show_food_service_providers_from_api():
 
     api_response = requests.get(NEEDED_API_URL, headers= headers)
     api_data = api_response.json() # returns data in json format
-    api_store_lists_object = api_data['businesses']
+    api_stores_object = api_data['businesses']
 
     #  list to hold stores
     suggested_stores = []
     other_stores_to_explore = []
 
-    for store in api_store_lists_object:
+    suggested_stores_array = []
+
+    for store in api_stores_object:
+        suggested_stores_object = {}
+  
         if(store['rating'] >= 2.5):
             suggested_stores.append(store['name'])
+
+            # remove this at the end
+            store_id = store['id']
+
+            suggested_stores_object['name'] = store['name']
+            suggested_stores_object['id'] = store['id']
+            suggested_stores_array .append(suggested_stores_object)
+    
         else:
             other_stores_to_explore.append(store['name'])
         
     length_of_suggested_stores = len(suggested_stores)
     length_of_other_stores = len(other_stores_to_explore)
+
+    print("*****************************")
+    print(f"suggested stores array is {suggested_stores_array}")
+
+    print("*****************************")
 
     # use random geneator function, generate 12 random restaurants
     if(length_of_suggested_stores > 12):
@@ -93,26 +115,78 @@ def show_food_service_providers_from_api():
                             suggested_stores = suggested_stores, 
                             other_stores = other_stores_to_explore,  
                             length_of_suggested_stores =  length_of_suggested_stores,
-                            length_of_other_stores = length_of_other_stores
+                            length_of_other_stores = length_of_other_stores,
+                            api_stores_object = api_stores_object,
+                            # api_retrieved_store = api_retrieved_store,
+                            store_id = store_id,
+
+                            suggested_stores_array = suggested_stores_array
                         )
 
 
 ################################################################################
 
+""" Data manupulation routes """
+#  Details page
+
+""" GET https://api.yelp.com/v3/businesses/{id} """
+
+@app.route('/restaurant/<restaurant_id>')
+def show_details_about_restaurant(restaurant_id):
+    """ use the store id to grab data from the api """
+
+    headers= {"Authorization": f"Bearer {api_key}" }
+    # city_name = request.args['city']  # not requests, get user input from the browser
+
+    NEEDED_API_URL = f'{BASE_URL}/businesses/{restaurant_id}'
+
+    api_response = requests.get(NEEDED_API_URL, headers= headers)
+    store_data = api_response.json() # returns data in json format
+    # api_stores_object = api_data['businesses']
+    address = store_data['location'][ 'display_address'] # returns an array(list)
+    address_to_string = ' '.join(address)
+
+    hours = store_data['hours']
+    first_data_in_hours = hours[0]
+    list_of_hours_for_seven_days = first_data_in_hours['open']
+
+    monday_hours = list_of_hours_for_seven_days[0]
+    opening_time_of_monday = monday_hours['start']
+    closing_time_of_monday = monday_hours['end']
+    business_hours_of_monday = opening_time_of_monday + ' - ' + closing_time_of_monday
+
+    tuesday_hours = list_of_hours_for_seven_days[1]
+    opening_time_of_tuesday = tuesday_hours['start']
+    closing_time_of_tuesday = tuesday_hours['end']
+    business_hours_of_tuesday = opening_time_of_tuesday + ' - ' + closing_time_of_tuesday
+
+    return render_template('restaurant-details.html', 
+                            store_data = store_data,
+                            address =  address_to_string,
+                            business_hours_of_monday = business_hours_of_monday,
+                            business_hours_of_tuesday = business_hours_of_tuesday 
+                        )
+    
+   
+
 
 # headers= {"Authorization": f"Bearer {api_key}" }
-# NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
+# # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
+
+# NEEDED_API_URL = 'https://api.yelp.com/v3/businesses/64sM5k1cgyVBwV6YBJ-zWQ'
 
 # api_response = requests.get(NEEDED_API_URL, headers= headers)
-# api_data = api_response.json() # returns data in json format
-# data_object = api_data['businesses']
+# store_data = api_response.json() # returns data in json format
+# # data_object = api_data['businesses']
 
-# for val in data_object:
-#     print('#################################################################')
-#     print(val['name'])
-#     print(val['is_closed'])
-#     print(val['display_phone'])
-#     address = val['location'][ 'display_address'] # returns an array(list)
-#     address_to_string = ' '.join(address)
-#     print(address_to_string)
-#     print(val['rating'])
+# # for val in data_object:
+# #     print('#################################################################')
+# #     print(val['name'])
+# #     print(val['is_closed'])
+# #     print(val['display_phone'])
+# #     address = val['location'][ 'display_address'] # returns an array(list)
+# #     address_to_string = ' '.join(address)
+# #     print(address_to_string)
+# #     print(val['rating'])
+
+# store = store_data['hours']
