@@ -43,6 +43,8 @@ api_key = API_SECRET_KEY
 BASE_URL = 'https://api.yelp.com/v3'
 BUSINESS_ENDPOINT = '/businesses/search'
 
+RATING = 2.5
+
 @app.route('/')
 def home():
     return render_template('city-form.html')
@@ -68,7 +70,7 @@ def show_food_service_providers_from_api():
         suggested_stores_object = {}
         other_stores_object = {}
   
-        if(store['rating'] >= 2.5):
+        if(store['rating'] >= RATING):
             suggested_stores_object['name'] = store['name']
             suggested_stores_object['id'] = store['id']
             suggested_stores_array .append(suggested_stores_object)
@@ -106,7 +108,7 @@ def show_food_service_providers_from_api():
 
 ################################################################################
 
-""" Details page, and Data manupulation routes """
+""" Each restaurant's Details route """
 
 @app.route('/restaurant/<restaurant_id>')
 def show_details_about_restaurant(restaurant_id):
@@ -212,7 +214,6 @@ def show_details_about_restaurant(restaurant_id):
                             saturday_hours = saturday_hours,
                             sunday_hours = sunday_hours
                         )
-    
 
 # headers= {"Authorization": f"Bearer {api_key}" }
 # # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
