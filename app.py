@@ -105,7 +105,6 @@ def show_food_service_providers_from_api():
                             api_stores_object = api_stores_object,
                         )
 
-
 ################################################################################
 
 """ Each restaurant's Details route """
@@ -214,6 +213,8 @@ def show_details_about_restaurant(restaurant_id):
                             saturday_hours = saturday_hours,
                             sunday_hours = sunday_hours
                         )
+
+################################################################################
 
 # headers= {"Authorization": f"Bearer {api_key}" }
 # # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
