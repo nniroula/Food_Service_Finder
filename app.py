@@ -4,8 +4,21 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from secret import API_SECRET_KEY
 
+#  sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
+
+# models
+from models import db, connect_db
+
 
 app = Flask(__name__)  
+
+#  To connect to database
+# Update the database name before useing it
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone-1-db'
+
+# from models
+connect_db(app)
 
 #  flask debugtoolbar setup
 app.config['SECRET_KEY'] = "nosecretkeyhere"
