@@ -48,14 +48,9 @@ def home():
     return render_template('city-form.html')
 
 
-# global variables
-# suggested_stores = []
-# other_stores_to_explore = []
-
-
 @app.route('/restaurants')
 def show_food_service_providers_from_api():
-    """ Take in user input of the city and render all food stores from the external api in the browser based on the user input """
+    """ Take in user input of the city and render all restaurants from the external api in the browser based on the user input """
 
     headers= {"Authorization": f"Bearer {api_key}" }
     city_name = request.args['city']  # not requests, get user input from the browser
@@ -66,145 +61,158 @@ def show_food_service_providers_from_api():
     api_data = api_response.json() # returns data in json format
     api_stores_object = api_data['businesses']
 
-    #  list to hold stores
-    suggested_stores = []
-    other_stores_to_explore = []
-
     suggested_stores_array = []
+    other_stores_array = []
 
     for store in api_stores_object:
         suggested_stores_object = {}
+        other_stores_object = {}
   
         if(store['rating'] >= 2.5):
-            suggested_stores.append(store['name'])
-
-            # remove this at the end
-            store_id = store['id']
-
             suggested_stores_object['name'] = store['name']
             suggested_stores_object['id'] = store['id']
             suggested_stores_array .append(suggested_stores_object)
     
         else:
-            other_stores_to_explore.append(store['name'])
+            other_stores_object['name'] = store['name']
+            other_stores_object['id'] = store['id']
+            other_stores_array.append(other_stores_object)
         
-    length_of_suggested_stores = len(suggested_stores)
-    length_of_other_stores = len(other_stores_to_explore)
+    length_of_suggested_stores_array = len(suggested_stores_array)
+    length_of_other_stores_array = len(other_stores_array)
 
-    print("*****************************")
-    print(f"suggested stores array is {suggested_stores_array}")
+    if(length_of_suggested_stores_array > 12):
+        list_of_randomly_selected_suggested_restaurants = generate_random_list_of_items(suggested_stores_array)
+        suggested_stores_array.clear()
 
-    print("*****************************")
-
-    # use random geneator function, generate 12 random restaurants
-    if(length_of_suggested_stores > 12):
-        list_of_randomly_selected_suggested_restaurants = generate_random_list_of_items(suggested_stores)
-        #  empty the suggested stores array, and append new values to it
-        suggested_stores.clear()
         for restaurant in list_of_randomly_selected_suggested_restaurants:
-            suggested_stores.append(restaurant)
+            suggested_stores_array.append(restaurant)
     
-    if(length_of_other_stores >12):
-        list_of_randomly_selected_other_restaurants = generate_random_list_of_items(other_stores_to_explore)
-         #  empty the other stores array, and append new values to it
-        other_stores_to_explore.clear()
+    if(length_of_other_stores_array > 12):
+        list_of_randomly_selected_other_restaurants = generate_random_list_of_items(other_stores_array)
+        other_stores_array.clear()
+
         for restaurant in list_of_randomly_selected_other_restaurants:
-            other_stores_to_explore.append(restaurant)
+            other_stores_array.append(restaurant)
 
     return render_template('food_providers.html', 
-                            suggested_stores = suggested_stores, 
-                            other_stores = other_stores_to_explore,  
-                            length_of_suggested_stores =  length_of_suggested_stores,
-                            length_of_other_stores = length_of_other_stores,
+                            suggested_stores_array = suggested_stores_array,
+                            other_stores_array = other_stores_array,  
+                            length_of_suggested_stores_array = length_of_suggested_stores_array,
+                            length_of_other_stores = length_of_other_stores_array,
                             api_stores_object = api_stores_object,
-                            # api_retrieved_store = api_retrieved_store,
-                            store_id = store_id,
-
-                            suggested_stores_array = suggested_stores_array
                         )
 
 
 ################################################################################
 
-""" Data manupulation routes """
-#  Details page
-
-""" GET https://api.yelp.com/v3/businesses/{id} """
+""" Details page, and Data manupulation routes """
 
 @app.route('/restaurant/<restaurant_id>')
 def show_details_about_restaurant(restaurant_id):
     """ use the store id to grab data from the api """
 
     headers= {"Authorization": f"Bearer {api_key}" }
-    # city_name = request.args['city']  # not requests, get user input from the browser
-
+    # """ GET https://api.yelp.com/v3/businesses/{id} """
     NEEDED_API_URL = f'{BASE_URL}/businesses/{restaurant_id}'
-
     api_response = requests.get(NEEDED_API_URL, headers= headers)
-    store_data = api_response.json() # returns data in json format
-    # api_stores_object = api_data['businesses']
-    address = store_data['location'][ 'display_address'] # returns an array(list)
+    store_data = api_response.json()
+    address = store_data['location'][ 'display_address']
     address_to_string = ' '.join(address)
 
-    hours = store_data['hours']
-    first_data_in_hours = hours[0]
-    list_of_hours_for_seven_days = first_data_in_hours['open']
+    keys = store_data.keys()
 
-    monday_hours = list_of_hours_for_seven_days[0]
-    opening_time_of_monday = monday_hours['start']
-    closing_time_of_monday = monday_hours['end']
-    business_hours_of_monday = opening_time_of_monday + ' - ' + closing_time_of_monday
+    if 'hours' not in keys:
+        hours_unavailable = -1
 
-    tuesday_hours = list_of_hours_for_seven_days[1]
-    opening_time_of_tuesday = tuesday_hours['start']
-    closing_time_of_tuesday = tuesday_hours['end']
-    business_hours_of_tuesday = opening_time_of_tuesday + ' - ' + closing_time_of_tuesday
+        return render_template('restaurant-details.html', 
+            store_data = store_data,
+            address =  address_to_string,
+            hours_unavailable = hours_unavailable
+        )
 
-    # wednesday
-    wednesday_hours = list_of_hours_for_seven_days[2]
-    opening_time_of_wednesday = wednesday_hours['start']
-    closing_time_of_wednesday = wednesday_hours['end']
-    business_hours_of_wednesday = opening_time_of_wednesday + ' - ' + closing_time_of_wednesday
+    else:
+        hrs = store_data['hours']
 
-    # Thursday
-    thursday_hours = list_of_hours_for_seven_days[3]
-    opening_time_of_thursday = thursday_hours['start']
-    closing_time_of_thursday = thursday_hours['end']
-    business_hours_of_thursday = opening_time_of_thursday + ' - ' + closing_time_of_thursday
+        numbered_days = []
+        monday_hours = []
+        tuesday_hours = []
+        wednesday_hours = []
+        thursday_hours = []
+        friday_hours = []
+        saturday_hours = []
+        sunday_hours = []
+        
+        first_data_in_hours = hrs[0] # a
+        list_of_hours_for_seven_days = first_data_in_hours['open'] #b
 
-    # Friday
-    friday_hours = list_of_hours_for_seven_days[4]
-    opening_time_of_friday = friday_hours['start']
-    closing_time_of_friday = friday_hours['end']
-    business_hours_of_friday = opening_time_of_friday + ' - ' + closing_time_of_friday
+        for element in list_of_hours_for_seven_days:
+            numbered_days.append(element['day'])
+            opening_time = element['start']
+            closing_time = element['end']
 
-    # Saturday
-    saturday_hours = list_of_hours_for_seven_days[5]
-    opening_time_of_saturday = saturday_hours['start']
-    closing_time_of_saturday = saturday_hours['end']
-    business_hours_of_saturday = opening_time_of_saturday + ' - ' + closing_time_of_saturday
+            # monday
+            if element['day'] == 0:
+                business_hours_of_monday = opening_time + ' - ' + closing_time
+                monday_hours.append(business_hours_of_monday)
+            
+            # tuesday
+            if element['day'] == 1:
+                business_hours_of_tuesday = opening_time + ' - ' + closing_time
+                tuesday_hours.append(business_hours_of_tuesday)
 
-    # Sunday
-    sunday_hours = list_of_hours_for_seven_days[6]
-    opening_time_of_sunday = sunday_hours['start']
-    closing_time_of_sunday = sunday_hours['end']
-    business_hours_of_sunday = opening_time_of_sunday + ' - ' + closing_time_of_sunday
+            # wednesday
+            if element['day'] == 2:
+                business_hours_of_wednesday = opening_time + ' - ' + closing_time
+                wednesday_hours.append(business_hours_of_wednesday)
 
+            # thursday
+            if element['day'] == 3:
+                business_hours_of_thursday = opening_time + ' - ' + closing_time
+                thursday_hours.append(business_hours_of_thursday)
+
+            # friday
+            if element['day'] == 4:
+                business_hours_of_friday = opening_time + ' - ' + closing_time
+                friday_hours.append(business_hours_of_friday)
+
+            # saturday
+            if element['day'] == 5:
+                business_hours_of_saturday = opening_time + ' - ' + closing_time
+                saturday_hours.append(business_hours_of_saturday)
+
+            # sunday
+            if element['day'] == 6:
+                business_hours_of_sunday = opening_time + ' - ' + closing_time
+                sunday_hours.append(business_hours_of_sunday)
+
+        if 0 not in numbered_days:
+            monday_hours.append('hours not available')
+        if 1 not in numbered_days:
+            tuesday_hours.append('hours not available')
+        if 2 not in numbered_days:
+            wednesday_hours.append('hours not available')
+        if 3 not in numbered_days:
+            thursday_hours.append('hours not available')
+        if 4 not in numbered_days:
+            friday_hours.append('hours not available')
+        if 5 not in numbered_days:
+            saturday_hours.append('hours not available')
+        if 6 not in numbered_days:
+            sunday_hours.append('hours not available')
 
     return render_template('restaurant-details.html', 
                             store_data = store_data,
                             address =  address_to_string,
-                            business_hours_of_monday = business_hours_of_monday,
-                            business_hours_of_tuesday = business_hours_of_tuesday,
-                            business_hours_of_wednesday = business_hours_of_wednesday,
-                            business_hours_of_thursday = business_hours_of_thursday,
-                            business_hours_of_friday = business_hours_of_friday,
-                            business_hours_of_saturday = business_hours_of_saturday,
-                            business_hours_of_sunday = business_hours_of_sunday
+                            monday_hours = monday_hours,
+                            tuesday_hours = tuesday_hours,
+                            wednesday_hours = wednesday_hours,
+                            thursday_hours = thursday_hours,
+                            friday_hours = friday_hours,
+                            saturday_hours = saturday_hours,
+                            sunday_hours = sunday_hours
                         )
     
-   
-
 
 # headers= {"Authorization": f"Bearer {api_key}" }
 # # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
