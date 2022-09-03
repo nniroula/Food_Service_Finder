@@ -9,6 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 # models
 from models import db, connect_db
+# form
+from forms import AddAUserForm
 
 
 app = Flask(__name__)  
@@ -24,6 +26,8 @@ connect_db(app)
 app.config['SECRET_KEY'] = "nosecretkeyhere"
 debug = DebugToolbarExtension(app)
 
+######################################################################################################
+
 @app.route('/first')
 def base_route():
     # return "Started Capstone Project"
@@ -36,6 +40,16 @@ def base_route():
 @app.route('/landing')
 def landing_page():
     return render_template('landing_page.html')
+
+######################################################################################################
+
+""" User route, signup, login """
+@app.route('/signup')
+def signup():
+    form = AddAUserForm()
+    return render_template('/User/signup-form.html', form = form)
+
+
 
 ######################################################################################################
 

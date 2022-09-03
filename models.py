@@ -4,8 +4,9 @@ from readline import append_history_file
 from flask_sqlalchemy import SQLAlchemy
 # from flask_bcrypt import Bcrypt
 from datetime import datetime
+from flask_bcrypt import Bcrypt
 
-# bcrypt = Bcrypt()
+bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 # def connect_db(app):
@@ -36,12 +37,6 @@ class User(db.Model):
         unique=False,
     )
 
-    email = db.Column(
-        db.Text,
-        nullable=False,
-        unique=True,
-    )
-
     username = db.Column(
         db.Text,
         nullable=False,
@@ -58,6 +53,12 @@ class User(db.Model):
         nullable=False,
     )
 
+    # email = db.Column(
+    #     db.Text,
+    #     nullable=False,
+    #     unique=True,
+    # )
+
     # messages = db.relationship('Message')
 
 
@@ -68,10 +69,10 @@ class User(db.Model):
     #     secondaryjoin=(Follows.user_being_followed_id == id)
     # )
 
-    likes = db.relationship(
-        'Message',
-        secondary="likes"
-    )
+    # likes = db.relationship(
+    #     'Message',
+    #     secondary="likes"
+    # )
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -125,6 +126,7 @@ class User(db.Model):
 
         return False
 
+# favorite stores
 # class Message(db.Model):
    
 #     __tablename__ = 'messages'
