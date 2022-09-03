@@ -4,6 +4,7 @@ certifi==2022.6.15
 charset-normalizer==2.1.1
 click==8.0.3
 Flask==2.0.2
+Flask-Bcrypt==1.0.1
 Flask-DebugToolbar==0.11.0
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==1.0.1

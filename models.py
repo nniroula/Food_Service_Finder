@@ -9,9 +9,6 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-# def connect_db(app):
-#     db.app = app
-#     db.init_app(app)
 
 # #################################################
 
@@ -23,6 +20,7 @@ class User(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        # autoincrement=True # in postgres id SERIAL primary_key
     )
 
     firstname = db.Column(
@@ -43,10 +41,10 @@ class User(db.Model):
         unique=True,
     )
 
-    image_url = db.Column(
-        db.Text,
-        default="/static/images/default-pic.png",
-    )
+    # image_url = db.Column(
+    #     db.Text,
+    #     default="/static/images/default-profile-icon.png",
+    # )
 
     password = db.Column(       # think about password
         db.Text,      # db.String, db.Binary(60)

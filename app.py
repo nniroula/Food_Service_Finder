@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request   #, redirect
+from flask import Flask, render_template, request, redirect
 # for debug toolbar
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from secret import API_SECRET_KEY
 
 #  sqlalchemy
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 
 # models
 from models import db, connect_db
@@ -15,16 +15,22 @@ from forms import AddAUserForm
 
 app = Flask(__name__)  
 
+# # Get DB_URI from environ variable (useful for production/testing) or,
+# # if not set there, use development local db.
+# app.config['SQLALCHEMY_DATABASE_URI'] = (
+#     os.environ.get('DATABASE_URL', 'postgresql:///restaurants_bd'))
+
 #  To connect to database
 # Update the database name before useing it
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone-1-db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
 
-# from models
-connect_db(app)
 
 #  flask debugtoolbar setup
 app.config['SECRET_KEY'] = "nosecretkeyhere"
 debug = DebugToolbarExtension(app)
+
+# from models
+connect_db(app)
 
 ######################################################################################################
 
@@ -44,11 +50,112 @@ def landing_page():
 ######################################################################################################
 
 """ User route, signup, login """
+
+
 @app.route('/signup')
 def signup():
     form = AddAUserForm()
+    if form.validate_on_submit(): # is it a post request, and is form(from our server) valid
+        return redirect("/login")
     return render_template('/User/signup-form.html', form = form)
 
+@app.route('/login')
+def login():
+    return render_template('/User/login-form.html')
+
+# ************
+
+"""
+@app.before_request
+def add_user_to_g():
+    # If we're logged in, add curr user to Flask global.
+
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+
+    else:
+        g.user = None
+
+
+def do_login(user):
+    # Log in user.
+
+    session[CURR_USER_KEY] = user.id
+
+
+def do_logout():
+    # Logout user.
+
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
+
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    # Handle user signup.
+
+    # Create new user and add to DB. Redirect to home page.
+
+    # If form not valid, present form.
+
+    # If the there already is a user with that username: flash message
+    # and re-present form.
+    # 
+    # hmmm, what if a user should be at least logged out for signup
+    #do_logout()     # check this again if needed
+
+    form = UserAddForm()
+    
+    if form.validate_on_submit():
+        try:
+            user = User.signup(
+                username=form.username.data,
+                password=form.password.data,
+                email=form.email.data,
+                image_url=form.image_url.data or User.image_url.default.arg,
+            )
+            db.session.commit()    #we do not do db.session.add(user) coz it has password in it
+
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            return render_template('users/signup.html', form=form)
+        
+        do_login(user)
+       
+        return redirect("/")
+
+    else:
+        return render_template('users/signup.html', form=form)
+    
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    # Handle user login.
+   
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data, form.password.data)                          
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+        flash("Invalid credentials.", 'danger')                       
+    return render_template('users/login.html', form=form)
+
+
+@app.route('/logout')                                
+def logout():
+    # Handle logout of user.
+
+    do_logout()
+    flash("Sorry you are logged out! Login back to continue", "warning")  
+
+    return redirect("/login")  
+
+
+"""
+# ************
 
 
 ######################################################################################################
