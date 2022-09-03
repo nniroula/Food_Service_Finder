@@ -73,7 +73,8 @@ class User(db.Model):
     # )
 
     def __repr__(self):
-        return f"<User #{self.id}: {self.username}, {self.email}>"
+        # return f"<User #{self.id}: {self.username}, {self.email}>"
+         return f"<User #{self.id}: {self.username}>"
 
     # def is_followed_by(self, other_user):
     #     """Is this user followed by `other_user`?"""
@@ -88,16 +89,17 @@ class User(db.Model):
     #     return len(found_user_list) == 1
 
     @classmethod
-    def signup(cls, username, email, password, image_url):
+    def signup(cls, firstname, lastname, username, password):
         """Sign up user. Hashes password and adds user to system."""
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
 
         user = cls(
+            firstname=firstname,
+            lastname=lastname,
             username=username,
-            email=email,
             password=hashed_pwd,
-            image_url=image_url,
+            # image_url=image_url
         )
 
         db.session.add(user)

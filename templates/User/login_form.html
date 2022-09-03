@@ -4,29 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignUp form</title>
+    <title>Login Form</title>
 </head>
 <body>
-    <h2>Signup form</h2>
-
+    <h3>Login Page</h3>
+    <h4>Please login</h4>
 
     {% for msg in get_flashed_messages() %}
         <p>{{msg}}</p>
     {% endfor %}
 
-    <!-- send signup form to login route, also logout to login route -->
-    <form  method="POST">
+
+    <form action="" method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
-            <p>
-                {{ field.label }}
-                {{ field }}
-            </p>
+    
+        <p>
+            {{ field.label }}
+            {{ field }}
+        </p>
         {% endfor %}
 
-    
-        <button>Submit</button>
-    </form>
-    
+        <!-- <button class="btn btn-primary btn-block btn-lg">Log in</button> -->
+
+        <button>Log in</button>
+
+    </form> 
 </body>
 </html>

@@ -1,17 +1,26 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, session, g
 # for debug toolbar
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from secret import API_SECRET_KEY
 
+
 #  sqlalchemy
 # from flask_sqlalchemy import SQLAlchemy
 
 # models
-from models import db, connect_db
+from models import db, connect_db, User
 # form
-from forms import AddAUserForm
+from forms import AddAUserForm, LoginForm
 
+from flask_bcrypt import Bcrypt
+
+from sqlalchemy.exc import IntegrityError 
+
+bcrypt = Bcrypt()
+
+# current user
+CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)  
 
@@ -24,10 +33,22 @@ app = Flask(__name__)
 # Update the database name before useing it
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
 
-
 #  flask debugtoolbar setup
 app.config['SECRET_KEY'] = "nosecretkeyhere"
+
+#  FOR TESTING, comment out bebug, Uncomment after testing
 debug = DebugToolbarExtension(app)
+
+# ********
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = False
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True  # I commented this out
+# app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
+
+app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
+
+# ***********
 
 # from models
 connect_db(app)
@@ -49,19 +70,95 @@ def landing_page():
 
 ######################################################################################################
 
-""" User route, signup, login """
+""" User route, signup, login, logout """
+
+# ##########
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
+
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+
+    else:
+        g.user = None
 
 
-@app.route('/signup')
+def do_login(user):
+    """Log in user."""
+
+    session[CURR_USER_KEY] = user.id
+
+
+# def do_logout():
+#     """Logout user."""
+
+#     if CURR_USER_KEY in session:
+#         del session[CURR_USER_KEY]
+
+# ##########
+
+# create a new user
+@app.route('/signup', methods=["GET", "POST"])
 def signup():
+
     form = AddAUserForm()
-    if form.validate_on_submit(): # is it a post request, and is form(from our server) valid
-        return redirect("/login")
+    # raise
+    if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
+        try:
+            firstname=form.firstname.data
+            lastname=form.lastname.data
+            username=form.username.data
+            password=form.password.data
+
+            hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
+
+            print("############################################")
+            # print(f'USER NAME IS PRABHA {user_name}, {first_name}, {last_name}, {pass_word} ')
+            print(f'USER NAME IS PRABHA {username}, {firstname}, {lastname}, {password} ')
+
+
+        # user = User.signup(first_name, last_name, user_name, hashed_pwd)
+            user = User.signup(firstname, lastname, username, hashed_pwd)
+
+            db.session.add(user)
+            db.session.commit()
+            print(f"PLease look at this user {user}")
+            flash('Signed up successfully!')
+            flash('Please login to verify your credentials')
+            return redirect("/login")
+        except IntegrityError:
+        # except:
+            flash("Username already taken")
+            flash("please signup with a different username")
+            return render_template('User/signup-form.html', form=form)
+
+        # do_login(user)
+
+        # flash('Signed up successfully!')
+        # flash('Please login to verify your credentials')
+        # return redirect("/login")
+  
     return render_template('/User/signup-form.html', form = form)
 
-@app.route('/login')
+ 
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template('/User/login-form.html')
+
+    form = LoginForm()
+    # # raise
+    if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
+
+        firstname = form.firstname.data
+        lastname = form.lastname.data
+        password = form.password.data
+        username = form.username.data
+        print("############################################")
+        print(f'USER NAME IS UNKnown ...... {username}, {firstname}, {lastname}, {password} ')
+        # flash('Great! signed up successfully!')
+        return redirect("/login")
+       
+    return render_template('/User/login_form.html', form=form)
 
 # ************
 

@@ -11,14 +11,14 @@ class AddAUserForm(FlaskForm):
     lastname = StringField("Last Name", validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=6)])
-    image_url = StringField('(Optional) Image URL')
+    # image_url = StringField('(Optional) Image URL')
 
 
-# class LoginForm(FlaskForm):
-#     """Login form."""
+class LoginForm(FlaskForm):
+    """Login form."""
 
-#     username = StringField('Username', validators=[DataRequired()])
-#     password = PasswordField('Password', validators=[Length(min=6)])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[Length(min=6)])
 
 
 # # Needs a form to update/edit a profile with bio, location, and the header image
