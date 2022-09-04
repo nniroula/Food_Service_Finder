@@ -106,38 +106,32 @@ def signup():
     # raise
     if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
         try:
-            firstname=form.firstname.data
-            lastname=form.lastname.data
-            username=form.username.data
-            password=form.password.data
+            first_name=form.firstname.data
+            last_name=form.lastname.data
+            user_name=form.username.data
+            pass_word=form.password.data
 
-            hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
+            hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
 
-            print("############################################")
-            # print(f'USER NAME IS PRABHA {user_name}, {first_name}, {last_name}, {pass_word} ')
-            print(f'USER NAME IS PRABHA {username}, {firstname}, {lastname}, {password} ')
-
+            print(f"SIGNUP username {user_name}")
+            print(f'Sign up password {pass_word}')
+            print('sign up hashed pass word {pass_word}')
 
         # user = User.signup(first_name, last_name, user_name, hashed_pwd)
-            user = User.signup(firstname, lastname, username, hashed_pwd)
+            user = User.signup(first_name, last_name, user_name, hashed_pwd)
 
             db.session.add(user)
             db.session.commit()
-            print(f"PLease look at this user {user}")
             flash('Signed up successfully!')
             flash('Please login to verify your credentials')
+
+            # do_login(user)
             return redirect("/login")
+
         except IntegrityError:
-        # except:
             flash("Username already taken")
             flash("please signup with a different username")
             return render_template('User/signup-form.html', form=form)
-
-        # do_login(user)
-
-        # flash('Signed up successfully!')
-        # flash('Please login to verify your credentials')
-        # return redirect("/login")
   
     return render_template('/User/signup-form.html', form = form)
 
@@ -148,17 +142,45 @@ def login():
     form = LoginForm()
     # # raise
     if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
+        user_name = form.username.data
+        pass_word = form.password.data
 
-        firstname = form.firstname.data
-        lastname = form.lastname.data
-        password = form.password.data
-        username = form.username.data
+        # import pdb
+        # pdb.set_trace()
+
+        user = User.authenticate(user_name, pass_word)
+
+        import pdb
+        pdb.set_trace()
+
+        if user:
+            # do_login(user)
+            flash(f"Hello, {user.username}!", " you logged in successfully!")
+            return redirect("/")
+        flash("Invalid credentials.", 'danger')
+  
         print("############################################")
-        print(f'USER NAME IS UNKnown ...... {username}, {firstname}, {lastname}, {password} ')
+        print(f'USER NAME IS UNKnown ...... {user_name}, {pass_word} ')
         # flash('Great! signed up successfully!')
-        return redirect("/login")
+        # return redirect("/login")
        
     return render_template('/User/login_form.html', form=form)
+
+# *****
+#   form = LoginForm()
+
+#     if form.validate_on_submit():
+#         user = User.authenticate(form.username.data, form.password.data)                          
+#         if user:
+#             do_login(user)
+#             flash(f"Hello, {user.username}!", "success")
+#             return redirect("/")
+#         flash("Invalid credentials.", 'danger')                       
+#     return render_template('users/login.html', form=form)
+
+# *****
+
+
 
 # ************
 

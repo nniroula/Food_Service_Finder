@@ -74,7 +74,7 @@ class User(db.Model):
 
     def __repr__(self):
         # return f"<User #{self.id}: {self.username}, {self.email}>"
-         return f"<User #{self.id}: {self.username}>"
+        return f"<User #{self.id}: {self.username}>"
 
     # def is_followed_by(self, other_user):
     #     """Is this user followed by `other_user`?"""
@@ -92,17 +92,19 @@ class User(db.Model):
     def signup(cls, firstname, lastname, username, password):
         """Sign up user. Hashes password and adds user to system."""
 
-        hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
+        # hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
+        hashed_pwd = bcrypt.generate_password_hash(password)
+
 
         user = cls(
             firstname=firstname,
             lastname=lastname,
             username=username,
             password=hashed_pwd,
-            # image_url=image_url
         )
+        # image_url=image_url
 
-        db.session.add(user)
+        # db.session.add(user)
 
         return user
 
@@ -117,7 +119,7 @@ class User(db.Model):
         If can't find matching user (or if password is wrong), returns False.
         """
 
-        user = User.query.filter_by(username=username).first()  
+        user = User.query.filter_by(username=username).first()
 
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)          

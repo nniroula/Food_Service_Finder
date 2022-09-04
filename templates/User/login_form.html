@@ -14,8 +14,7 @@
         <p>{{msg}}</p>
     {% endfor %}
 
-
-    <form action="" method="POST">
+    <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
     
@@ -25,7 +24,6 @@
         </p>
         {% endfor %}
 
-        <!-- <button class="btn btn-primary btn-block btn-lg">Log in</button> -->
 
         <button>Log in</button>
 
