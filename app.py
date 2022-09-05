@@ -113,9 +113,9 @@ def signup():
 
             hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
 
-            print(f"SIGNUP username {user_name}")
-            print(f'Sign up password {pass_word}')
-            print(f'sign up hashed pass word {hashed_pwd}')
+            # print(f"SIGNUP username {user_name}")
+            # print(f'Sign up password {pass_word}')
+            # print(f'sign up hashed pass word {hashed_pwd}')
 
         # user = User.signup(first_name, last_name, user_name, hashed_pwd)
             user = User.signup(first_name, last_name, user_name, hashed_pwd)
@@ -131,9 +131,9 @@ def signup():
         except IntegrityError:
             flash("Username already taken")
             flash("please signup with a different username")
-            return render_template('users/signup-form.html', form=form)
+            return render_template('users/signup_form.html', form=form)
   
-    return render_template('/users/signup-form.html', form = form)
+    return render_template('/users/signup_form.html', form = form)
 
  
 @app.route('/login', methods=["GET", "POST"])
