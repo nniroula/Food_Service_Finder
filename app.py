@@ -73,21 +73,21 @@ def landing_page():
 """ User route, signup, login, logout """
 
 # ##########
-@app.before_request
-def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
+# @app.before_request
+# def add_user_to_g():
+#     """If we're logged in, add curr user to Flask global."""
 
-    if CURR_USER_KEY in session:
-        g.user = User.query.get(session[CURR_USER_KEY])
+#     if CURR_USER_KEY in session:
+#         g.user = User.query.get(session[CURR_USER_KEY])
 
-    else:
-        g.user = None
+#     else:
+#         g.user = None
 
 
-def do_login(user):
-    """Log in user."""
+# def do_login(user):
+#     """Log in user."""
 
-    session[CURR_USER_KEY] = user.id
+#     session[CURR_USER_KEY] = user.id
 
 
 # def do_logout():
@@ -276,7 +276,7 @@ RATING = 2.5
 
 @app.route('/')
 def home():
-    return render_template('city-form.html')
+    return render_template('/stores/city-form.html')
 
 
 @app.route('/restaurants')
@@ -326,7 +326,7 @@ def show_food_service_providers_from_api():
         for restaurant in list_of_randomly_selected_other_restaurants:
             other_stores_array.append(restaurant)
 
-    return render_template('food_providers.html', 
+    return render_template('/stores/food_providers.html', 
                             suggested_stores_array = suggested_stores_array,
                             other_stores_array = other_stores_array,  
                             length_of_suggested_stores_array = length_of_suggested_stores_array,
@@ -355,7 +355,7 @@ def show_details_about_restaurant(restaurant_id):
     if 'hours' not in keys:
         hours_unavailable = -1
 
-        return render_template('restaurant-details.html', 
+        return render_template('/stores/restaurant-details.html', 
             store_data = store_data,
             address =  address_to_string,
             hours_unavailable = hours_unavailable
@@ -431,7 +431,7 @@ def show_details_about_restaurant(restaurant_id):
         if 6 not in numbered_days:
             sunday_hours.append('hours not available')
 
-    return render_template('restaurant-details.html', 
+    return render_template('/stores/restaurant-details.html', 
                             store_data = store_data,
                             address =  address_to_string,
                             monday_hours = monday_hours,
