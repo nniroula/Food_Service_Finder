@@ -2,7 +2,6 @@
 
 from readline import append_history_file
 from flask_sqlalchemy import SQLAlchemy
-# from flask_bcrypt import Bcrypt
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 
@@ -92,15 +91,14 @@ class User(db.Model):
     def signup(cls, firstname, lastname, username, password):
         """Sign up user. Hashes password and adds user to system."""
 
-        # hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
-        hashed_pwd = bcrypt.generate_password_hash(password)
-
+        # hashed_pwd = bcrypt.generate_password_hash(password).decode('utf8')
 
         user = cls(
             firstname=firstname,
             lastname=lastname,
             username=username,
-            password=hashed_pwd,
+            # password=hashed_pwd,
+            password=password,
         )
         # image_url=image_url
 
@@ -121,10 +119,20 @@ class User(db.Model):
 
         user = User.query.filter_by(username=username).first()
 
-        if user:
-            is_auth = bcrypt.check_password_hash(user.password, password)          
-            if is_auth:                                             
-                return user
+     
+        print("IAM IN Authentication ............................")
+        print(user)
+        print(user.username)
+        print(user.password)
+        print(f'NOt a user.password {password}')
+        print("IAM IN Authentication ............................")
+
+        # import pdb
+        # pdb.set_trace()
+  
+        verify = bcrypt.check_password_hash(user.password, password) #(password_from_db, userinput_password)
+        if user and verify:
+            return user
 
         return False
 

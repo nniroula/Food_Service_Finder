@@ -14,16 +14,17 @@
         <p>{{msg}}</p>
     {% endfor %}
 
+    <!-- <form action="/" method="GET"> -->
     <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
     
         <p>
             {{ field.label }}
-            {{ field }}
+            <!-- {{ field }} -->
+            {{ field(placeholder=field.label.text) }}
         </p>
         {% endfor %}
-
 
         <button>Log in</button>
 

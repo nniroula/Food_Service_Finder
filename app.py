@@ -115,7 +115,7 @@ def signup():
 
             print(f"SIGNUP username {user_name}")
             print(f'Sign up password {pass_word}')
-            print('sign up hashed pass word {pass_word}')
+            print(f'sign up hashed pass word {hashed_pwd}')
 
         # user = User.signup(first_name, last_name, user_name, hashed_pwd)
             user = User.signup(first_name, last_name, user_name, hashed_pwd)
@@ -148,19 +148,25 @@ def login():
         # import pdb
         # pdb.set_trace()
 
+        # hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
+
+        # user = User.authenticate(user_name, pass_word)
+        # user = User.authenticate(form.username.data, form.password.data)
         user = User.authenticate(user_name, pass_word)
 
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
         if user:
             # do_login(user)
             flash(f"Hello, {user.username}!", " you logged in successfully!")
             return redirect("/")
-        flash("Invalid credentials.", 'danger')
+        # flash("Invalid credentials.", 'danger')
+        flash("Invalid credentials.")
   
         print("############################################")
-        print(f'USER NAME IS UNKnown ...... {user_name}, {pass_word} ')
+        print(f'LOGIN user NAME IS UNKnown ...... {user_name}')
+        print(f'LOGIN password: {pass_word} ')
         # flash('Great! signed up successfully!')
         # return redirect("/login")
        
