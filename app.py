@@ -149,10 +149,13 @@ def login():
 
         if user:
             # do_login(user)
-            flash(f"Hello, {user.username}!, you logged in successfully!")
+            flash(f"Hello, {user.username}!, you are logged in")
+            flash('Enter city and state to search for local restaurant')
 
             # fix this where to redirect
-            return redirect("/")
+            # return redirect("/")
+            # render a page to search for hotels
+            return render_template("/cities/city_form.html")
         # flash("Invalid credentials.", 'danger')
         flash("Invalid credentials.")
        
