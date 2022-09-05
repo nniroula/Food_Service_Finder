@@ -131,9 +131,9 @@ def signup():
         except IntegrityError:
             flash("Username already taken")
             flash("please signup with a different username")
-            return render_template('User/signup-form.html', form=form)
+            return render_template('users/signup-form.html', form=form)
   
-    return render_template('/User/signup-form.html', form = form)
+    return render_template('/users/signup-form.html', form = form)
 
  
 @app.route('/login', methods=["GET", "POST"])
@@ -151,11 +151,12 @@ def login():
             # do_login(user)
             flash(f"Hello, {user.username}!, you logged in successfully!")
 
+            # fix this where to redirect
             return redirect("/")
         # flash("Invalid credentials.", 'danger')
         flash("Invalid credentials.")
        
-    return render_template('/User/login_form.html', form=form)
+    return render_template('/users/login_form.html', form=form)
 
 
 # ************
@@ -274,9 +275,12 @@ BUSINESS_ENDPOINT = '/businesses/search'
 
 RATING = 2.5
 
+# @app.route('/')
+# def home():
+#     return render_template('/cities/city-form.html')
 @app.route('/')
 def home():
-    return render_template('/cities/city-form.html')
+    return render_template('home-page.html')
 
 
 @app.route('/restaurants')
