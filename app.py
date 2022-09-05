@@ -276,7 +276,7 @@ RATING = 2.5
 
 @app.route('/')
 def home():
-    return render_template('/stores/city-form.html')
+    return render_template('/cities/city-form.html')
 
 
 @app.route('/restaurants')
