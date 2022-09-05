@@ -140,52 +140,22 @@ def signup():
 def login():
 
     form = LoginForm()
-    # # raise
+
     if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
         user_name = form.username.data
         pass_word = form.password.data
 
-        # import pdb
-        # pdb.set_trace()
-
-        # hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
-
-        # user = User.authenticate(user_name, pass_word)
-        # user = User.authenticate(form.username.data, form.password.data)
         user = User.authenticate(user_name, pass_word)
-
-        # import pdb
-        # pdb.set_trace()
 
         if user:
             # do_login(user)
-            flash(f"Hello, {user.username}!", " you logged in successfully!")
+            flash(f"Hello, {user.username}!, you logged in successfully!")
+
             return redirect("/")
         # flash("Invalid credentials.", 'danger')
         flash("Invalid credentials.")
-  
-        print("############################################")
-        print(f'LOGIN user NAME IS UNKnown ...... {user_name}')
-        print(f'LOGIN password: {pass_word} ')
-        # flash('Great! signed up successfully!')
-        # return redirect("/login")
        
     return render_template('/User/login_form.html', form=form)
-
-# *****
-#   form = LoginForm()
-
-#     if form.validate_on_submit():
-#         user = User.authenticate(form.username.data, form.password.data)                          
-#         if user:
-#             do_login(user)
-#             flash(f"Hello, {user.username}!", "success")
-#             return redirect("/")
-#         flash("Invalid credentials.", 'danger')                       
-#     return render_template('users/login.html', form=form)
-
-# *****
-
 
 
 # ************
