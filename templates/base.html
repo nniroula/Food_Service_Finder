@@ -1,17 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- add links to style sheet here -->
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <title> {% block title %} Food Service Providers {% endblock %} </title>
-</head>
-<body>
-    {% block content %}
-        <h1>Hello food service providers</h1>
-    {% endblock %}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <title> {% block title %} Food Service Providers {% endblock %} </title>
+    </head>
+
+    <body>
+        <div class="navbar-items">
+            <!-- In base.html file -->
+            <nav>
+                <div>
+                <span>Local restaurants finder</span>
+             
+                {% if 'current_user_id' in session %}
+                    <a class="links" href="/logout">Log out</a>
+                    <a class="links" href="profile_page.html">Profile</a>
+                    <!-- <a class="links" href="/signup">Sign Up</a> -->
+          
+                {% else %}
+                    <a class="links" href="/signup">Sign up</a>
+                    <a class="links" href="/login">Log in</a> 
+
+                {% endif %}
+
     
-</body>
+            </div>
+        
+            </nav>
+        </div>
+
+        {% block content %}
+            <h1>Hello food service providers</h1>
+        {% endblock %}
+        
+    </body>
 </html>

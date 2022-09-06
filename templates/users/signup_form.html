@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,8 +13,7 @@
         <p>{{msg}}</p>
     {% endfor %}
 
-    <!-- send signup form to login route, also logout to login route -->
-    <form  method="POST">
+    <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
             <p>
@@ -25,6 +24,33 @@
 
         <button>Sign up</button>
     </form>
-    
 </body>
-</html>
+</html>  -->
+
+{% extends 'base.html' %}
+
+{% block title %} Signup page {% endblock %}
+
+{% block content %}
+<h2>Signup form</h2>
+
+<!-- In sign up form -->
+
+{% for msg in get_flashed_messages() %}
+    <p>{{msg}}</p>
+{% endfor %}
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        <p>
+            {{ field.label }}
+            {{ field }}
+        </p>
+    {% endfor %}
+
+    <button>Sign up</button>
+</form>
+{% endblock %}
+
+

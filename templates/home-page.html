@@ -1,19 +1,47 @@
+
 {% extends 'base.html' %}
 
-{% block title %} Landing Page {% endblock %}
+{% block title %} Home Page {% endblock %}
 
 {% block content %}
-   <div>
-        <nav id="nav-bar">
-            <a class="links" href="/signup">Sign Up</a>
-            <a class="links" href="/login">Login</a>
-            <!-- <a class="links" href="logout_page.html">Logout</a>
-            <a class="links" href="profile_page.html">Profile</a> -->
-        </nav>
-    </div>
 
-    <main class="land-page">
-    <h1> Find local restaurants and fast food stores </h1>
-</main>
+    <h1>in HOme PAGE</h1>
+
+    <main class="body-content">
+        <h1> Find local restaurants in your city </h1>
+    </main>
+
+       <!-- <div class="navbar-items">    
+        <nav>
+            <span>Local restaurants finder</span>
+            {% if CURRENT_USER_ID not in session %}
+                <a class="links" href="/signup">Sign Up</a>
+                <a class="links" href="/login">Login</a>   
+            {% endif %}
+
+            {% if CURRENT_USER_ID in session %}
+                <a class="links" href="/logout">Logout</a>
+                <a class="links" href="profile_page.html">Profile</a>
+            {% endif %}
+    
+        </nav>
+    </div>  -->
 
 {% endblock %}
+
+
+   <!-- <div class="navbar-items">    
+        <nav>
+            <span>Local restaurants finder</span>
+            {% if CURRENT_USER_ID not in session %}
+                <a class="links" href="/signup">Sign Up</a>
+                <a class="links" href="/login">Login</a>   
+            {% endif %}
+
+            {% if CURRENT_USER_ID in session %}
+                <a class="links" href="/logout">Logout</a>
+                <a class="links" href="profile_page.html">Profile</a>
+            {% endif %}
+    
+        </nav>
+    </div> -->

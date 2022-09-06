@@ -1,7 +1,7 @@
 
-div #nav-bar{
+/* div .nav-bar{
     background-color:greenyellow;
-}
+} */
 .links{
    /* padding: 20px; */
    padding-left: 20px;
@@ -10,11 +10,28 @@ div #nav-bar{
    float:right 
 }
 
-.land-page{
+.body-content{
     text-align: center;
     color:tomato;
     padding-top: 30vh;
 }
 h1{
     background-color: turquoise;
+}
+
+/* .nav-bar{
+    background-color:greenyellow;
+} */
+
+.navbar-items{
+    background-color:greenyellow;
+    /* position: fixed;  good for scrolling */
+    /* position:sticky */
+    /* position: relative;
+    z-index: 9999; */
+    /* position: fixed !important; */
+     /* position: sticky; */
+     position: fixed;
+    top: 0;
+    z-index: 999
 }

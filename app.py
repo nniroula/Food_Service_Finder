@@ -19,8 +19,8 @@ from sqlalchemy.exc import IntegrityError
 
 bcrypt = Bcrypt()
 
-# current user
-CURR_USER_KEY = "curr_user"
+# current user to track login status
+CURRENT_USER_ID = "current_user_id"
 
 app = Flask(__name__)  
 
@@ -67,6 +67,13 @@ def base_route():
 @app.route('/landing')
 def landing_page():
     return render_template('landing_page.html')
+
+# @app.route('/')
+# def home():
+#     return render_template('/cities/city-form.html')
+@app.route('/')
+def home():
+    return render_template('home-page.html')
 
 ######################################################################################################
 
@@ -132,6 +139,8 @@ def signup():
             flash("Username already taken")
             flash("please signup with a different username")
             return render_template('users/signup_form.html', form=form)
+
+    # session[CURRENT_USER_ID] = user.id
   
     return render_template('/users/signup_form.html', form = form)
 
@@ -147,20 +156,35 @@ def login():
 
         user = User.authenticate(user_name, pass_word)
 
+        # import pdb
+        # pdb.set_trace()
+
         if user:
             # do_login(user)
+            # add to flask session 
+            session[CURRENT_USER_ID] = user.id
+            session['id'] = user.id
+            session["current_user_id"] = user.id
+    
             flash(f"Hello, {user.username}!, you are logged in")
             flash('Enter city and state to search for local restaurant')
 
-            # fix this where to redirect
-            # return redirect("/")
-            # render a page to search for hotels
+            # render a page to search for hotels, make this to return protected route
             return render_template("/cities/city_form.html")
         # flash("Invalid credentials.", 'danger')
-        flash("Invalid credentials.")
+        flash("Invalid credentials. Try again.")
+        # return render_template('/users/login_form.html')
        
     return render_template('/users/login_form.html', form=form)
 
+@app.route('/logout')
+def logout():
+    # if CURR_USER_KEY in session:
+    #     del session[CURR_USER_KEY]
+    print('I AM in log out zone ..........')
+    if CURRENT_USER_ID in session:
+        session.pop(CURRENT_USER_ID)
+    return redirect('/login')
 
 # ************
 
@@ -277,13 +301,6 @@ BASE_URL = 'https://api.yelp.com/v3'
 BUSINESS_ENDPOINT = '/businesses/search'
 
 RATING = 2.5
-
-# @app.route('/')
-# def home():
-#     return render_template('/cities/city-form.html')
-@app.route('/')
-def home():
-    return render_template('home-page.html')
 
 
 @app.route('/restaurants')

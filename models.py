@@ -119,14 +119,6 @@ class User(db.Model):
 
         user = User.query.filter_by(username=username).first()
 
-     
-        print("IAM IN Authentication ............................")
-        print(user)
-        print(user.username)
-        print(user.password)
-        print(f'NOt a user.password {password}')
-        print("IAM IN Authentication ............................")
-
         # import pdb
         # pdb.set_trace()
   
