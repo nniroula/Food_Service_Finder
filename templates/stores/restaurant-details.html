@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -6,7 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Details of a restaurant</title>
     </head>
-    <body>
+    <body> -->
+
+
+{% extends 'base.html' %}
+
+{% block title %} Signup page {% endblock %}
+
+{% block content %}
 
         <p>Name of Restaurant: {{ store_data['name'] }}</p>
         <p>Phone number: {{ store_data['display_phone'] }}</p>
@@ -83,5 +90,6 @@
             </ul>
 
             {% endif %}
-    </body>
-</html>
+    <!-- </body>
+</html> -->
+{% endblock %}
