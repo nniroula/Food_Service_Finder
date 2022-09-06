@@ -162,8 +162,8 @@ def login():
         if user:
             # do_login(user)
             # add to flask session 
-            session[CURRENT_USER_ID] = user.id
-            session['id'] = user.id
+            # session[CURRENT_USER_ID] = user.id
+            # session['id'] = user.id
             session["current_user_id"] = user.id
     
             flash(f"Hello, {user.username}!, you are logged in")
