@@ -50,14 +50,8 @@ class User(db.Model):
         nullable=False,
     )
 
-    # email = db.Column(
-    #     db.Text,
-    #     nullable=False,
-    #     unique=True,
-    # )
 
     # messages = db.relationship('Message')
-
 
     # following = db.relationship(
     #     "User",
@@ -87,7 +81,7 @@ class User(db.Model):
         """Sign up user. Hashes password and adds user to system."""
 
         # hashed_pwd = bcrypt.generate_password_hash(password).decode('utf8')
-
+        # if firstname != ''
         user = cls(
             firstname=firstname,
             lastname=lastname,
@@ -124,33 +118,27 @@ class User(db.Model):
         return False
 
 # favorite stores
-# class Message(db.Model):
+class FavoriteStores(db.Model):
    
-#     __tablename__ = 'messages'
+    __tablename__ = 'favorite_stores'
 
-#     id = db.Column(
-#         db.Integer,
-#         primary_key=True,
-#     )
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
 
-#     text = db.Column(
-#         db.String(140),
-#         nullable=False,
-#     )
+    store_name = db.Column(
+        db.String(140),
+        nullable=False,
+    )
 
-#     timestamp = db.Column(
-#         db.DateTime,
-#         nullable=False,
-#         default=datetime.utcnow(),
-#     )
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='CASCADE'),
+        nullable=False,
+    )
 
-#     user_id = db.Column(
-#         db.Integer,
-#         db.ForeignKey('users.id', ondelete='CASCADE'),
-#         nullable=False,
-#     )
-
-#     user = db.relationship('User')
+    user = db.relationship('User')
 
 
 # #################################################
