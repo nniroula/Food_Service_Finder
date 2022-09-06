@@ -120,7 +120,7 @@ class UserModelTestCase(TestCase):
         # login with invalid password
         with self.assertRaises(ValueError):
             # User.signup("username", "lastNameHere", 'testUser1', None)
-            User.signup("firstNameHere", "lastNameHere", 'username1', None)
+            User.signup("firstNameHere", "lastNameHere", 'username1', '')
 
 
 # ASK 4 AssertionError: ValueError not raised
