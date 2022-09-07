@@ -428,11 +428,13 @@ def favorite_stores():
     
     store_array = []
     for store in database_stores:
+        store = store
         store_object = {}
         if store.user_id == user.id:
             store_object['name'] = store.store_name
             store_object['phone'] = store.store_phone
             store_object['address'] = store.store_address
+            store_object['id'] = store.id
 
             if store_object not in store_array:
                 store_array.append(store_object)
@@ -440,18 +442,31 @@ def favorite_stores():
     return render_template("/stores/favorite_stores.html", store_array = store_array)
 
 
-# @app.route('/favorite/delete/<store_name>', methods=['POST'])
-@app.route('/favorite/delete', methods=['POST'])
+@app.route('/favorite/delete/<int:id>', methods=['POST'])
+# @app.route('/favorite/delete', methods=['POST'])
 # def delete_favorite_store(store_name):
-def delete_favorite_store():
+def delete_favorite_store(id):
+# def delete_favorite_store():
+
+    print(f'fav store id is {id}')
 
     # if 'current_user_id' in session:
     if g.user.id:
+        # grab the store info from the database, and then delete
+        # fav_store = FavoriteStores.query.get(fav_store_id)
+        fav_store = FavoriteStores.query.get(id)
+        print("ID Here is {id}")
         # db.session.delete(store_name)
-        db.session.remove()
+        db.session.delete(fav_store)
         db.session.commit()
 
-    return redirect('/')
+        return redirect('/favorites')
+
+    # display this flash message
+    flash("You are not authorized to delete.")
+
+    # return redirect('/')
+    return redirect('/favorites')
 
 
 
