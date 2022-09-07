@@ -37,7 +37,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
 #  flask debugtoolbar setup
 app.config['SECRET_KEY'] = "nosecretkeyhere"
 
-#  FOR TESTING, comment out bebug, Uncomment after testing
+#  FOR TESTING, comment out debug, Uncomment after testing
 debug = DebugToolbarExtension(app)
 
 # ********
@@ -56,22 +56,6 @@ connect_db(app)
 
 ######################################################################################################
 
-@app.route('/first')
-def base_route():
-    # return "Started Capstone Project"
-    return render_template('base.html')
-
-# @app.route('/signup')
-# def signup():
-#     return render_template('landing_page.html')
-
-@app.route('/landing')
-def landing_page():
-    return render_template('landing_page.html')
-
-# @app.route('/')
-# def home():
-#     return render_template('/cities/city-form.html')
 @app.route('/')
 def home():
     return render_template('home-page.html')
@@ -91,19 +75,6 @@ def add_user_to_g():
     else:
         g.user = None
 
-
-# def do_login(user):
-#     """Log in user."""
-
-#     session[CURR_USER_KEY] = user.id
-
-
-# def do_logout():
-#     """Logout user."""
-
-#     if CURR_USER_KEY in session:
-#         del session[CURR_USER_KEY]
-
 # ##########
 
 # create a new user
@@ -111,7 +82,7 @@ def add_user_to_g():
 def signup():
 
     form = AddAUserForm()
-    # raise
+
     if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
         try:
             first_name=form.firstname.data
@@ -121,11 +92,6 @@ def signup():
 
             hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
 
-            # print(f"SIGNUP username {user_name}")
-            # print(f'Sign up password {pass_word}')
-            # print(f'sign up hashed pass word {hashed_pwd}')
-
-        # user = User.signup(first_name, last_name, user_name, hashed_pwd)
             user = User.signup(first_name, last_name, user_name, hashed_pwd)
 
             db.session.add(user)
@@ -133,15 +99,12 @@ def signup():
             flash('Signed up successfully!')
             flash('Please login to verify your credentials')
 
-            # do_login(user)
             return redirect("/login")
 
         except IntegrityError:
             flash("Username already taken")
             flash("please signup with a different username")
             return render_template('users/signup_form.html', form=form)
-
-    # session[CURRENT_USER_ID] = user.id
   
     return render_template('/users/signup_form.html', form = form)
 
@@ -157,16 +120,8 @@ def login():
 
         user = User.authenticate(user_name, pass_word)
 
-        # import pdb
-        # pdb.set_trace()
-
         if user:
-            # do_login(user)
-            # add to flask session 
-            # session[CURRENT_USER_ID] = user.id
-            # session['id'] = user.id
             session["current_user_id"] = user.id
-            # USER_ID_IN_ACTION = user.id
     
             flash(f"Hello, {user.username}!, you are logged in")
             flash('Enter city and state to search for local restaurant')
@@ -181,9 +136,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    # if CURR_USER_KEY in session:
-    #     del session[CURR_USER_KEY]
-    print('I AM in log out zone ..........')
+
     if CURRENT_USER_ID in session:
         session.pop(CURRENT_USER_ID)
     return redirect('/login')
@@ -270,7 +223,6 @@ def show_food_service_providers_from_api():
 
 """ Each restaurant's Details route """
 
-# @app.route('/restaurant/<restaurant_id>')
 @app.route('/restaurant/<restaurant_id>', methods=["POST", "GET"])
 def show_details_about_restaurant(restaurant_id):
     """ use the store id to grab data from the api """
@@ -285,17 +237,11 @@ def show_details_about_restaurant(restaurant_id):
 
     keys = store_data.keys()
 
-    # post request for adding favorite stores to database
-    # if store_object not in store_array:
-    #     store_array.append(store_object)
-
     if request.method == 'POST':
-
         stores_in_db = FavoriteStores.query.all()
 
         if 'current_user_id' in session:
             store_name = store_data['name']
-            # store_id = store_data['id']
             restaurant_phone = store_data['display_phone']
 
             favorite_store = FavoriteStores(
@@ -343,8 +289,8 @@ def show_details_about_restaurant(restaurant_id):
         saturday_hours = []
         sunday_hours = []
         
-        first_data_in_hours = hrs[0] # a
-        list_of_hours_for_seven_days = first_data_in_hours['open'] #b
+        first_data_in_hours = hrs[0] 
+        list_of_hours_for_seven_days = first_data_in_hours['open'] 
 
         for element in list_of_hours_for_seven_days:
             numbered_days.append(element['day'])
@@ -443,20 +389,12 @@ def favorite_stores():
 
 
 @app.route('/favorite/delete/<int:id>', methods=['POST'])
-# @app.route('/favorite/delete', methods=['POST'])
-# def delete_favorite_store(store_name):
 def delete_favorite_store(id):
-# def delete_favorite_store():
-
-    print(f'fav store id is {id}')
 
     # if 'current_user_id' in session:
     if g.user.id:
-        # grab the store info from the database, and then delete
-        # fav_store = FavoriteStores.query.get(fav_store_id)
         fav_store = FavoriteStores.query.get(id)
-        print("ID Here is {id}")
-        # db.session.delete(store_name)
+    
         db.session.delete(fav_store)
         db.session.commit()
 
