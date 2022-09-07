@@ -1,13 +1,10 @@
 """SQLAlchemy models for capstone 1 project """
 
-# from readline import append_history_file
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
-
 
 # #################################################
 
@@ -19,7 +16,6 @@ class User(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
-        # autoincrement=True # in postgres id SERIAL primary_key
     )
 
     firstname = db.Column(
@@ -51,30 +47,8 @@ class User(db.Model):
     )
 
 
-    # messages = db.relationship('Message')
-
-    # following = db.relationship(
-    #     "User",
-    #     secondary="follows",
-    #     primaryjoin=(Follows.user_following_id == id),
-    #     secondaryjoin=(Follows.user_being_followed_id == id)
-    # )
-
-    # likes = db.relationship(
-    #     'Message',
-    #     secondary="likes"
-    # )
-
     def __repr__(self):
-        # return f"<User #{self.id}: {self.username}, {self.email}>"
         return f"<User #{self.id}: {self.username}>"
-
-
-    # def is_following(self, other_user):
-    #     """Is this user following `other_use`?"""
-
-    #     found_user_list = [user for user in self.following if user == other_user]
-    #     return len(found_user_list) == 1
 
     @classmethod
     def signup(cls, firstname, lastname, username, password):
@@ -107,9 +81,6 @@ class User(db.Model):
         """
 
         user = User.query.filter_by(username=username).first()
-
-        # import pdb
-        # pdb.set_trace()
   
         verify = bcrypt.check_password_hash(user.password, password) #(password_from_db, userinput_password)
         if user and verify:
@@ -117,7 +88,7 @@ class User(db.Model):
 
         return False
 
-# favorite stores
+
 class FavoriteStores(db.Model):
    
     __tablename__ = 'favorite_stores'
