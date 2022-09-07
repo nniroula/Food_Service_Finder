@@ -188,100 +188,6 @@ def logout():
         session.pop(CURRENT_USER_ID)
     return redirect('/login')
 
-# ************
-
-"""
-@app.before_request
-def add_user_to_g():
-    # If we're logged in, add curr user to Flask global.
-
-    if CURR_USER_KEY in session:
-        g.user = User.query.get(session[CURR_USER_KEY])
-
-    else:
-        g.user = None
-
-
-def do_login(user):
-    # Log in user.
-
-    session[CURR_USER_KEY] = user.id
-
-
-def do_logout():
-    # Logout user.
-
-    if CURR_USER_KEY in session:
-        del session[CURR_USER_KEY]
-
-
-@app.route('/signup', methods=["GET", "POST"])
-def signup():
-    # Handle user signup.
-
-    # Create new user and add to DB. Redirect to home page.
-
-    # If form not valid, present form.
-
-    # If the there already is a user with that username: flash message
-    # and re-present form.
-    # 
-    # hmmm, what if a user should be at least logged out for signup
-    #do_logout()     # check this again if needed
-
-    form = UserAddForm()
-    
-    if form.validate_on_submit():
-        try:
-            user = User.signup(
-                username=form.username.data,
-                password=form.password.data,
-                email=form.email.data,
-                image_url=form.image_url.data or User.image_url.default.arg,
-            )
-            db.session.commit()    #we do not do db.session.add(user) coz it has password in it
-
-        except IntegrityError:
-            flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
-        
-        do_login(user)
-       
-        return redirect("/")
-
-    else:
-        return render_template('users/signup.html', form=form)
-    
-
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    # Handle user login.
-   
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        user = User.authenticate(form.username.data, form.password.data)                          
-        if user:
-            do_login(user)
-            flash(f"Hello, {user.username}!", "success")
-            return redirect("/")
-        flash("Invalid credentials.", 'danger')                       
-    return render_template('users/login.html', form=form)
-
-
-@app.route('/logout')                                
-def logout():
-    # Handle logout of user.
-
-    do_logout()
-    flash("Sorry you are logged out! Login back to continue", "warning")  
-
-    return redirect("/login")  
-
-
-"""
-# ************
-
 
 ######################################################################################################
 
@@ -380,8 +286,13 @@ def show_details_about_restaurant(restaurant_id):
     keys = store_data.keys()
 
     # post request for adding favorite stores to database
- 
+    # if store_object not in store_array:
+    #     store_array.append(store_object)
+
     if request.method == 'POST':
+
+        stores_in_db = FavoriteStores.query.all()
+
         if 'current_user_id' in session:
             store_name = store_data['name']
             # store_id = store_data['id']
@@ -393,14 +304,22 @@ def show_details_about_restaurant(restaurant_id):
                 store_phone = restaurant_phone,
                 store_address = address_to_string
             )
-           
-            db.session.add(favorite_store)
-            db.session.commit()
 
-            # return render_template("/stores/favorite_stores.html", store_data = store_data, address_to_string =  address_to_string)
+            result = False
+
+            for store in stores_in_db:
+                if (favorite_store.store_address != store.store_address and favorite_store.user_id != store.user_id) or\
+                    (favorite_store.store_phone != store.store_phone and favorite_store.user_id != store.user_id) or\
+                    (favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id):
+                    result = True
+                else:
+                    result = False
+
+            if result == True:
+                db.session.add(favorite_store)
+                db.session.commit()
+
             return redirect('/')
-
-
     # above is post request
 
     if 'hours' not in keys:
@@ -519,6 +438,20 @@ def favorite_stores():
                 store_array.append(store_object)
 
     return render_template("/stores/favorite_stores.html", store_array = store_array)
+
+
+# @app.route('/favorite/delete/<store_name>', methods=['POST'])
+@app.route('/favorite/delete', methods=['POST'])
+# def delete_favorite_store(store_name):
+def delete_favorite_store():
+
+    # if 'current_user_id' in session:
+    if g.user.id:
+        # db.session.delete(store_name)
+        db.session.remove()
+        db.session.commit()
+
+    return redirect('/')
 
 
 

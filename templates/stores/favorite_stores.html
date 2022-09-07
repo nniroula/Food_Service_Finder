@@ -16,8 +16,16 @@
                 </ul>
             </li>
         </ul>
+
+
+    <!-- <form action="/restaurant/{{store['id']}}" method="POST"> -->
+    <form action="/favorite/delete/{{store['name']}}" method="POST">
+
+        <button>Remove from favorite list</button>
+    </form>
      
     {% endfor %}
+
   
 {% endblock %}
 
