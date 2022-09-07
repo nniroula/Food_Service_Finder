@@ -14,7 +14,7 @@
 {% block title %} Signup page {% endblock %}
 
 {% block content %}
-
+ 
         <p>Name of Restaurant: {{ store_data['name'] }}</p>
         <p>Phone number: {{ store_data['display_phone'] }}</p>
 
@@ -90,6 +90,15 @@
             </ul>
 
             {% endif %}
+
     <!-- </body>
 </html> -->
+
+<!--  -->
+<form action="/restaurant/{{store_data['id']}}" method="POST">
+    <button>Add to favorite list</button>
+</form>
+
+<!--  -->
 {% endblock %}
+
