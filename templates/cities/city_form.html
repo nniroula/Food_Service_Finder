@@ -4,9 +4,6 @@
 
 {% block content %}
 
-
-
-    <!-- in city form file -->
     {% for msg in get_flashed_messages() %}
         <p>{{msg}}</p>
     {% endfor %}
@@ -15,8 +12,6 @@
         <input type="text" name="city" placeholder="city name" />
         <button>Submit</button>
     </form>
-
-    <!-- {{ id }} -->
 
 {% endblock %} 
 
