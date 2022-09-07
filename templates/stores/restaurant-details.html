@@ -1,36 +1,21 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Details of a restaurant</title>
-    </head>
-    <body> -->
-
-
 {% extends 'base.html' %}
-
 {% block title %} Restaurant details page {% endblock %}
 
 {% block content %}
- 
-        <p>Name of Restaurant: {{ store_data['name'] }}</p>
-        <p>Phone number: {{ store_data['display_phone'] }}</p>
 
-        <p>Address: {{ address }}</p>
+    <p>Name of Restaurant: {{ store_data['name'] }}</p>
+    <p>Phone number: {{ store_data['display_phone'] }}</p>
+    <p>Address: {{ address }}</p>
 
-        {% if hours_unavailable == -1 %}
-            <p>Hours of Operations: </p>
-            <ul>
-                <li>
-                    hours not available
-                </li>
-            </ul>
-
-            {% else %}
-
-            <p>Hours of Operations: </p>
+    {% if hours_unavailable == -1 %}
+        <p>Hours of Operations: </p>
+        <ul>
+            <li>
+                hours not available
+            </li>
+        </ul>
+    {% else %}
+        <p>Hours of Operations: </p>
             <ul>
                 <li>
                     Monday:
@@ -39,7 +24,6 @@
                             <li>{{ hour }}</li>
                     {% endfor %}
                     </ul>
-               
                 </li>
                 <li>
                     Tuesday:
@@ -88,17 +72,11 @@
                     </ul>
                 </li>
             </ul>
+    {% endif %}
 
-            {% endif %}
-
-    <!-- </body>
-</html> -->
-
-<!--  -->
     <form action="/restaurant/{{store_data['id']}}" method="POST">
         <button>Add to favorite list</button>
     </form>
 
-<!--  -->
 {% endblock %}
 
