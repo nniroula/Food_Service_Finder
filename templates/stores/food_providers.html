@@ -5,64 +5,43 @@
 
 {% block content %}
 
-<!-- <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Food Service Providers</title>
-    </head>
-    <body> -->
-
-
-        {% if length_of_suggested_stores_array == 0 %}
-            <p>Suggested Restaurant(s): </p>
-                <ul>
-                    <li>
-                        <p>No store suggestion at this time</p>
-                    </li>
-                </ul>
-        {% else %}
-            <p>Suggested Restaurant(s): </p>
-
-            <!-- {% for store in suggested_stores_array %}
+    {% if length_of_suggested_stores_array == 0 %}
+        <p>Suggested Restaurant(s): </p>
             <ul>
-               <li> <a href="/restaurant/{{store['id']}}">{{ store['name'] }}</a></li> 
+                <li>
+                    <p>No store suggestion at this time</p>
+                </li>
             </ul>
-            {% endfor %} -->
-            {% for store in suggested_stores_array %}
-            <!-- <ol type='1'> -->
+    {% else %}
+        <p>Suggested Restaurant(s): </p>
+
+        {% for store in suggested_stores_array %}
             <ul>
-               <li> 
+                <li> 
                     <a href="/restaurant/{{store['id']}}">{{ store['name'] }}</a>
-            
                 </li> 
             </ul>
+        {% endfor %}
 
-            {% endfor %}
+    {% endif %}
 
-        {% endif %}
-
-        {% if length_of_other_stores_array == 0 %}
-            <p>More Restaurant(s) to explore: </p>
-                <ul>
-                    <li>
-                        <p>No store suggestion at this time</p>
-                    </li>
-                </ul>
-        {% else %}
-            <p>More Restaurant(s) to explore: </p>
-            {% for store in other_stores_array %}
+    {% if length_of_other_stores_array == 0 %}
+        <p>More Restaurant(s) to explore: </p>
             <ul>
-                <li>  <a href="/restaurant/{{ store['id'] }}">{{ store['name'] }}</a></li> 
+                <li>
+                    <p>No store suggestion at this time</p>
+                </li>
             </ul>
-            {% endfor %}
-            
-        {% endif %}
-
-    <!-- </body>
-</html> -->
+    {% else %}
+        <p>More Restaurant(s) to explore: </p>
+        {% for store in other_stores_array %}
+            <ul>
+                <li>  
+                    <a href="/restaurant/{{ store['id'] }}">{{ store['name'] }}</a>
+                </li> 
+            </ul>
+        {% endfor %}
+    {% endif %}
 
 {% endblock %} 
 
