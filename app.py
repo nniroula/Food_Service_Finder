@@ -1,20 +1,10 @@
 from flask import Flask, render_template, request, redirect, flash, session, g
-# for debug toolbar
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from secret import API_SECRET_KEY
-
-
-#  sqlalchemy
-# from flask_sqlalchemy import SQLAlchemy
-
-# models
 from models import FavoriteStores, db, connect_db, User
-# form
 from forms import AddAUserForm, LoginForm
-
 from flask_bcrypt import Bcrypt
-
 from sqlalchemy.exc import IntegrityError 
 
 bcrypt = Bcrypt()
@@ -25,34 +15,16 @@ USER_ID_IN_ACTION = -1
 
 app = Flask(__name__)  
 
-# # Get DB_URI from environ variable (useful for production/testing) or,
-# # if not set there, use development local db.
-# app.config['SQLALCHEMY_DATABASE_URI'] = (
-#     os.environ.get('DATABASE_URL', 'postgresql:///restaurants_bd'))
-
-#  To connect to database
-# Update the database name before useing it
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
-
-#  flask debugtoolbar setup
 app.config['SECRET_KEY'] = "nosecretkeyhere"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = False
+app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
 
 #  FOR TESTING, comment out debug, Uncomment after testing
 debug = DebugToolbarExtension(app)
-
-# ********
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = False
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True  # I commented this out
-# app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-
-app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
-
-# ***********
-
-# from models
 connect_db(app)
+
 
 ######################################################################################################
 
@@ -61,7 +33,6 @@ def home():
     return render_template('home-page.html')
 
 # secret route, you cannot access this route without being logged in
-
 @app.route('/search')
 def search_restaurants():
     if  "current_user_id" not in session:
