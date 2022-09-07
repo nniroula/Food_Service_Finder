@@ -1,44 +1,8 @@
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-</head>
-<body>
-    <h3>Login Page</h3>
-    <h4>Please login</h4>
-
-    {% for msg in get_flashed_messages() %}
-        <p>{{msg}}</p>
-    {% endfor %}
-
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {% for field in form if field.widget.input_type != 'hidden' %}
-    
-        <p>
-            {{ field.label }}
-            {{ field(placeholder=field.label.text) }}
-        </p>
-        {% endfor %}
-
-        <button>Log in</button>
-
-    </form> 
-</body>
-</html>  -->
-
-
 {% extends 'base.html' %}
-
 {% block title %} Login Page {% endblock %}
 
 {% block content %}
 
-    <h3>Login Page</h3>
     <h4>Please login</h4>
 
     {% for msg in get_flashed_messages() %}
@@ -48,13 +12,11 @@
     <form method="POST">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
-
             <p>
                 {{ field.label }}
                 {{ field(placeholder=field.label.text) }}
             </p>
         {% endfor %}
-
         <button>Log in</button>
     </form> 
 
