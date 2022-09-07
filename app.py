@@ -500,15 +500,13 @@ def show_details_about_restaurant(restaurant_id):
 
 @app.route('/favorites')
 def favorite_stores():
-
-    # import pdb
-    # pdb.set_trace()
+    """ create a list of user's favorite stores """
 
     # access database
     user = User.query.get_or_404(g.user.id)
 
     database_stores = FavoriteStores.query.all() # works for retrieving all stores from database
- 
+    
     store_array = []
     for store in database_stores:
         store_object = {}
@@ -516,11 +514,9 @@ def favorite_stores():
             store_object['name'] = store.store_name
             store_object['phone'] = store.store_phone
             store_object['address'] = store.store_address
-            store_array.append(store_object)
 
-        print(store_object)
-
-    # nam = database_stores['store_name']
+            if store_object not in store_array:
+                store_array.append(store_object)
 
     return render_template("/stores/favorite_stores.html", store_array = store_array)
 
