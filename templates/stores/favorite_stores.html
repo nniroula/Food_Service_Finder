@@ -9,21 +9,19 @@
     {% for store in store_array %}
         <ul>
             <li>
+                <!-- needs styling here -->
                 {{ store['name'] }}:
                 <ul>
-                    <li>{{store['phone']}}</li>
-                    <li>{{store['address']}}</li>
+                <li>Phone:{{store['phone']}}</li>
+                <li>Address:{{store['address']}}</li>
                 </ul>
             </li>
         </ul>
 
+        <form action="/favorite/delete/{{store['id']}}" method="POST">
 
-    <!-- <form action="/restaurant/{{store['id']}}" method="POST"> -->
-    <!-- <form action="/favorite/delete/{{store['name']}}" method="POST"> -->
-    <form action="/favorite/delete/{{store['id']}}" method="POST">
-
-        <button>Remove from favorite list</button>
-    </form>
+            <button>Remove from favorite list</button>
+        </form>
 
     {% endfor %}
 

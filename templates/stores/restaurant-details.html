@@ -11,7 +11,7 @@
 
 {% extends 'base.html' %}
 
-{% block title %} Signup page {% endblock %}
+{% block title %} Restaurant details page {% endblock %}
 
 {% block content %}
  
@@ -95,9 +95,9 @@
 </html> -->
 
 <!--  -->
-<form action="/restaurant/{{store_data['id']}}" method="POST">
-    <button>Add to favorite list</button>
-</form>
+    <form action="/restaurant/{{store_data['id']}}" method="POST">
+        <button>Add to favorite list</button>
+    </form>
 
 <!--  -->
 {% endblock %}

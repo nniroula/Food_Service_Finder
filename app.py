@@ -60,11 +60,21 @@ connect_db(app)
 def home():
     return render_template('home-page.html')
 
+# secret route, you cannot access this route without being logged in
+
+@app.route('/search')
+def search_restaurants():
+    if  "current_user_id" not in session:
+        flash("You must be logged in to search for restaurants.")
+        return redirect('/')
+    else:
+        return render_template('/cities/city_form.html')
+
+
 ######################################################################################################
 
 """ User route, signup, login, logout """
 
-# ##########
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -75,15 +85,13 @@ def add_user_to_g():
     else:
         g.user = None
 
-# ##########
 
-# create a new user
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
 
     form = AddAUserForm()
 
-    if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
+    if form.validate_on_submit():
         try:
             first_name=form.firstname.data
             last_name=form.lastname.data
@@ -91,7 +99,6 @@ def signup():
             pass_word=form.password.data
 
             hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
-
             user = User.signup(first_name, last_name, user_name, hashed_pwd)
 
             db.session.add(user)
@@ -114,7 +121,7 @@ def login():
 
     form = LoginForm()
 
-    if form.validate_on_submit(): # is it a post request, and is form(from our server) with valid CSRF token
+    if form.validate_on_submit(): 
         user_name = form.username.data
         pass_word = form.password.data
 
@@ -126,8 +133,8 @@ def login():
             flash(f"Hello, {user.username}!, you are logged in")
             flash('Enter city and state to search for local restaurant')
 
-            # render a page to search for hotels, make this to return protected route
-            return render_template("/cities/city_form.html")
+            # protected route, cannot see without logging in
+            return redirect('/search')
         # flash("Invalid credentials.", 'danger')
         flash("Invalid credentials. Try again.")
         # return render_template('/users/login_form.html')
@@ -240,6 +247,7 @@ def show_details_about_restaurant(restaurant_id):
     if request.method == 'POST':
         stores_in_db = FavoriteStores.query.all()
 
+        # if g.user.id in session:
         if 'current_user_id' in session:
             store_name = store_data['name']
             restaurant_phone = store_data['display_phone']
@@ -254,20 +262,23 @@ def show_details_about_restaurant(restaurant_id):
             result = False
 
             for store in stores_in_db:
-                if (favorite_store.store_address != store.store_address and favorite_store.user_id != store.user_id) or\
-                    (favorite_store.store_phone != store.store_phone and favorite_store.user_id != store.user_id) or\
-                    (favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id):
+                address_userId = favorite_store.store_address != store.store_address and favorite_store.user_id != store.user_id
+                phone_userId = favorite_store.store_phone != store.store_phone and favorite_store.user_id != store.user_id
+                name_userId = favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id
+         
+                if address_userId == True or phone_userId == True or name_userId == True:
+
                     result = True
                 else:
                     result = False
 
-            if result == True:
-                db.session.add(favorite_store)
-                db.session.commit()
+                if result == True:
+                    db.session.add(favorite_store)
+                    db.session.commit()
 
-            return redirect('/')
-    # above is post request
+            return redirect('/favorites')
 
+    # if request.method == 'GET':
     if 'hours' not in keys:
         hours_unavailable = -1
 
@@ -276,7 +287,6 @@ def show_details_about_restaurant(restaurant_id):
             address =  address_to_string,
             hours_unavailable = hours_unavailable
         )
-
     else:
         hrs = store_data['hours']
 
@@ -290,44 +300,37 @@ def show_details_about_restaurant(restaurant_id):
         sunday_hours = []
         
         first_data_in_hours = hrs[0] 
-        list_of_hours_for_seven_days = first_data_in_hours['open'] 
+        list_of_hours_for_seven_days = first_data_in_hours['open']
 
         for element in list_of_hours_for_seven_days:
             numbered_days.append(element['day'])
             opening_time = element['start']
             closing_time = element['end']
 
-            # monday
             if element['day'] == 0:
                 business_hours_of_monday = opening_time + ' - ' + closing_time
                 monday_hours.append(business_hours_of_monday)
             
-            # tuesday
             if element['day'] == 1:
                 business_hours_of_tuesday = opening_time + ' - ' + closing_time
                 tuesday_hours.append(business_hours_of_tuesday)
 
-            # wednesday
             if element['day'] == 2:
                 business_hours_of_wednesday = opening_time + ' - ' + closing_time
                 wednesday_hours.append(business_hours_of_wednesday)
 
-            # thursday
             if element['day'] == 3:
                 business_hours_of_thursday = opening_time + ' - ' + closing_time
                 thursday_hours.append(business_hours_of_thursday)
 
-            # friday
             if element['day'] == 4:
                 business_hours_of_friday = opening_time + ' - ' + closing_time
                 friday_hours.append(business_hours_of_friday)
 
-            # saturday
             if element['day'] == 5:
                 business_hours_of_saturday = opening_time + ' - ' + closing_time
                 saturday_hours.append(business_hours_of_saturday)
 
-            # sunday
             if element['day'] == 6:
                 business_hours_of_sunday = opening_time + ' - ' + closing_time
                 sunday_hours.append(business_hours_of_sunday)
@@ -370,11 +373,10 @@ def favorite_stores():
     # access database
     user = User.query.get_or_404(g.user.id)
 
-    database_stores = FavoriteStores.query.all() # works for retrieving all stores from database
+    database_stores = FavoriteStores.query.all()
     
     store_array = []
     for store in database_stores:
-        store = store
         store_object = {}
         if store.user_id == user.id:
             store_object['name'] = store.store_name
@@ -403,30 +405,6 @@ def delete_favorite_store(id):
     # display this flash message
     flash("You are not authorized to delete.")
 
-    # return redirect('/')
     return redirect('/favorites')
 
-
-
 ################################################################################
-
-# headers= {"Authorization": f"Bearer {api_key}" }
-# # NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location=Denver&term=Restaurant'
-
-# NEEDED_API_URL = 'https://api.yelp.com/v3/businesses/64sM5k1cgyVBwV6YBJ-zWQ'
-
-# api_response = requests.get(NEEDED_API_URL, headers= headers)
-# store_data = api_response.json() # returns data in json format
-# # data_object = api_data['businesses']
-
-# # for val in data_object:
-# #     print('#################################################################')
-# #     print(val['name'])
-# #     print(val['is_closed'])
-# #     print(val['display_phone'])
-# #     address = val['location'][ 'display_address'] # returns an array(list)
-# #     address_to_string = ' '.join(address)
-# #     print(address_to_string)
-# #     print(val['rating'])
-
-# store = store_data['hours']

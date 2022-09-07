@@ -13,28 +13,25 @@
             <!-- In base.html file -->
             <nav>
                 <div>
-                <span>Local restaurants finder</span>
-             
-                {% if 'current_user_id' in session %}
-                    <a class="links" href="/logout">Log out</a>
-                    <a class="links" href="profile_page.html">Profile</a>
-                    <!-- <a class="links" href="/signup">Sign Up</a> -->
-                    <a class="links" href="/favorites">Favorite stores</a>
-          
-                {% else %}
-                    <a class="links" href="/signup">Sign up</a>
-                    <a class="links" href="/login">Log in</a> 
+                    <span>Local restaurants finder</span>
+                
+                    {% if 'current_user_id' in session %}
+                        <a class="links" href="/logout">Log out</a>
+                        <a class="links" href="profile_page.html">Profile</a>
+                        <a class="links" href="/favorites">Favorite stores</a>
+                        <a class="links" href="/search">Search</a>
+            
+                    {% else %}
+                        <a class="links" href="/signup">Sign up</a>
+                        <a class="links" href="/login">Log in</a> 
 
-                {% endif %}
-
-    
-            </div>
-        
+                    {% endif %}
+                </div>
             </nav>
         </div>
 
         {% block content %}
-            <h1>Hello food service providers</h1>
+            <h1>Local Restaurants Finder</h1>
         {% endblock %}
         
     </body>
