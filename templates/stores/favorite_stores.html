@@ -3,5 +3,22 @@
 {% block title %} Favorite store Page {% endblock %}
 
 {% block content %}
+
     <h1> This is a favorite store page </h1>
+
+    {% for store in store_array %}
+        <ul>
+            <li>
+                {{ store['name'] }}:
+                <ul>
+                    <li>{{store['phone']}}</li>
+                    <li>{{store['address']}}</li>
+                </ul>
+            </li>
+        </ul>
+     
+    {% endfor %}
+  
 {% endblock %}
+
+

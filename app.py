@@ -9,7 +9,7 @@ from secret import API_SECRET_KEY
 # from flask_sqlalchemy import SQLAlchemy
 
 # models
-from models import db, connect_db, User
+from models import FavoriteStores, db, connect_db, User
 # form
 from forms import AddAUserForm, LoginForm
 
@@ -21,6 +21,7 @@ bcrypt = Bcrypt()
 
 # current user to track login status
 CURRENT_USER_ID = "current_user_id"
+USER_ID_IN_ACTION = -1
 
 app = Flask(__name__)  
 
@@ -80,15 +81,15 @@ def home():
 """ User route, signup, login, logout """
 
 # ##########
-# @app.before_request
-# def add_user_to_g():
-#     """If we're logged in, add curr user to Flask global."""
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
 
-#     if CURR_USER_KEY in session:
-#         g.user = User.query.get(session[CURR_USER_KEY])
+    if CURRENT_USER_ID in session:
+        g.user = User.query.get(session[CURRENT_USER_ID])
 
-#     else:
-#         g.user = None
+    else:
+        g.user = None
 
 
 # def do_login(user):
@@ -165,6 +166,7 @@ def login():
             # session[CURRENT_USER_ID] = user.id
             # session['id'] = user.id
             session["current_user_id"] = user.id
+            # USER_ID_IN_ACTION = user.id
     
             flash(f"Hello, {user.username}!, you are logged in")
             flash('Enter city and state to search for local restaurant')
@@ -362,7 +364,8 @@ def show_food_service_providers_from_api():
 
 """ Each restaurant's Details route """
 
-@app.route('/restaurant/<restaurant_id>')
+# @app.route('/restaurant/<restaurant_id>')
+@app.route('/restaurant/<restaurant_id>', methods=["POST", "GET"])
 def show_details_about_restaurant(restaurant_id):
     """ use the store id to grab data from the api """
 
@@ -375,6 +378,30 @@ def show_details_about_restaurant(restaurant_id):
     address_to_string = ' '.join(address)
 
     keys = store_data.keys()
+
+    # post request for adding favorite stores to database
+ 
+    if request.method == 'POST':
+        if 'current_user_id' in session:
+            store_name = store_data['name']
+            # store_id = store_data['id']
+            restaurant_phone = store_data['display_phone']
+
+            favorite_store = FavoriteStores(
+                store_name = store_name, 
+                user_id = g.user.id,
+                store_phone = restaurant_phone,
+                store_address = address_to_string
+            )
+           
+            db.session.add(favorite_store)
+            db.session.commit()
+
+            # return render_template("/stores/favorite_stores.html", store_data = store_data, address_to_string =  address_to_string)
+            return redirect('/')
+
+
+    # above is post request
 
     if 'hours' not in keys:
         hours_unavailable = -1
@@ -466,6 +493,38 @@ def show_details_about_restaurant(restaurant_id):
                             saturday_hours = saturday_hours,
                             sunday_hours = sunday_hours
                         )
+
+################################################################################
+
+""" Favorite stores route """
+
+@app.route('/favorites')
+def favorite_stores():
+
+    # import pdb
+    # pdb.set_trace()
+
+    # access database
+    user = User.query.get_or_404(g.user.id)
+
+    database_stores = FavoriteStores.query.all() # works for retrieving all stores from database
+ 
+    store_array = []
+    for store in database_stores:
+        store_object = {}
+        if store.user_id == user.id:
+            store_object['name'] = store.store_name
+            store_object['phone'] = store.store_phone
+            store_object['address'] = store.store_address
+            store_array.append(store_object)
+
+        print(store_object)
+
+    # nam = database_stores['store_name']
+
+    return render_template("/stores/favorite_stores.html", store_array = store_array)
+
+
 
 ################################################################################
 

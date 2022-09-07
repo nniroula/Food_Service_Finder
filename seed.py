@@ -28,8 +28,8 @@ db.session.add(test_user_2)
 db.session.commit()
 
 # add some favorite stores
-fav_store_1 = FavoriteStores(store_name='General Store', user_id = test_user_1.id)
-fav_store_2 = FavoriteStores(store_name='Fancy Center', user_id = test_user_2.id)
+fav_store_1 = FavoriteStores(store_name='General Store', user_id = test_user_1.id, store_phone = '000-000-0000', store_address = '108050305 E Bethany Pl ')
+fav_store_2 = FavoriteStores(store_name='Fancy Center', user_id = test_user_2.id, store_phone = '000-000-4674', store_address = '100300 Dayton Street, 80010')
 
 db.session.add(fav_store_1)
 db.session.add(fav_store_2)

@@ -138,6 +138,15 @@ class FavoriteStores(db.Model):
         nullable=False,
     )
 
+    store_phone = db.Column(
+        db.String,
+        nullable = True,
+    )
+    store_address = db.Column(
+        db.String,
+        nullable = True
+    )
+
     user = db.relationship('User')
 
 
