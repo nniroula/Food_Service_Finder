@@ -6,6 +6,7 @@ from models import FavoriteStores, db, connect_db, User
 from forms import AddAUserForm, LoginForm, UpdateUserProfileForm
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError 
+import random
 
 bcrypt = Bcrypt()
 
@@ -30,11 +31,17 @@ BUSINESS_ENDPOINT = '/businesses/search'
 RATING = 2.5
 
 
-######################################################################################################
+def generate_random_list_of_items(arrayOfItems):
+    """ generates a list of 12 randomly selected items from a list """
+
+    list_of_twelve_random_items = random.sample(arrayOfItems, 12)
+    return list_of_twelve_random_items
+
 
 @app.route('/')
 def home():
     """ renders the base url of the local restaurants finder web app."""
+
     return render_template('home-page.html')
 
 
@@ -95,23 +102,6 @@ def signup():
 def login():
     """ Allows a user to login. Checks if the user is not yet signed up, and also if password and username are valid."""
 
-    # form = LoginForm()
-    # if form.validate_on_submit(): 
-    #     user_name = form.username.data
-    #     pass_word = form.password.data
-
-    #     user = User.authenticate(user_name, pass_word)
-
-    #     if user:
-    #         session["current_user_id"] = user.id
-    #         flash(f"Hello, {user.username}!, you are logged in")
-    #         flash('Enter city and state to search for local restaurant')
-    #         return redirect('/search')
-    #     flash("Invalid credentials. Please enter valid user name and password.")
-    #     return render_template('/users/login_form.html', form = form)
-       
-    # return render_template('/users/login_form.html', form=form)
-
     form = LoginForm()
 
     if form.validate_on_submit(): 
@@ -136,37 +126,13 @@ def login():
     return render_template('/users/login_form.html', form=form)
 
 
-
-
-
 @app.route('/logout')
 def logout():
+    """ logs a user in session out."""
 
     if CURRENT_USER_ID in session:
         session.pop(CURRENT_USER_ID)
     return redirect('/login')
-
-
-######################################################################################################
-
-""" Geneeal purpose functions """
-import random
-
-def generate_random_list_of_items(arrayOfItems):
-    """ generates a list of 12 randomly selected items from a list """
-
-    list_of_twelve_random_items = random.sample(arrayOfItems, 12)
-    return list_of_twelve_random_items
-
-
-######################################################################################################
-""" External API Access and data retrieval as well as manipulation """
-
-# api_key = API_SECRET_KEY
-# BASE_URL = 'https://api.yelp.com/v3'
-# BUSINESS_ENDPOINT = '/businesses/search'
-
-# RATING = 2.5
 
 
 @app.route('/restaurants')
@@ -174,12 +140,10 @@ def show_food_service_providers_from_api():
     """ Take in user input of the city and render all restaurants from the external api in the browser based on the user input """
 
     headers= {"Authorization": f"Bearer {api_key}" }
-    city_name = request.args['city']  # not requests, get user input from the browser
-
+    city_name = request.args['city']
     NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}&term=Restaurant'
-
     api_response = requests.get(NEEDED_API_URL, headers= headers)
-    api_data = api_response.json() # returns data in json format
+    api_data = api_response.json()
     api_stores_object = api_data['businesses']
 
     suggested_stores_array = []
@@ -224,13 +188,10 @@ def show_food_service_providers_from_api():
                             api_stores_object = api_stores_object,
                         )
 
-################################################################################
-
-""" Restaurant's Details route """
 
 @app.route('/restaurant/<restaurant_id>', methods=["POST", "GET"])
 def show_details_about_restaurant(restaurant_id):
-    """ use the store id to grab data from the api """
+    """ Provides details about a restaurant. Uses the store id to grab data from the api. """
 
     headers= {"Authorization": f"Bearer {api_key}" }
     NEEDED_API_URL = f'{BASE_URL}/businesses/{restaurant_id}'
@@ -244,7 +205,6 @@ def show_details_about_restaurant(restaurant_id):
     if request.method == 'POST':
         stores_in_db = FavoriteStores.query.all()
 
-        # if g.user.id in session:
         if 'current_user_id' in session:
             store_name = store_data['name']
             restaurant_phone = store_data['display_phone']
@@ -264,7 +224,6 @@ def show_details_about_restaurant(restaurant_id):
                 name_userId = favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id
          
                 if address_userId == True or phone_userId == True or name_userId == True:
-
                     result = True
                 else:
                     result = False
@@ -289,15 +248,7 @@ def show_details_about_restaurant(restaurant_id):
 
         numbered_days, monday_hours, tuesday_hours, wednesday_hours = [], [], [], []
         thursday_hours, friday_hours, saturday_hours, sunday_hours = [], [], [], []
-        # numbered_days = []
-        # monday_hours = []
-        # tuesday_hours = []
-        # wednesday_hours = []
-        # thursday_hours = []
-        # friday_hours = []
-        # saturday_hours = []
-        # sunday_hours = []
-        
+    
         first_data_in_hours = hrs[0] 
         list_of_hours_for_seven_days = first_data_in_hours['open']
 
@@ -361,17 +312,12 @@ def show_details_about_restaurant(restaurant_id):
                             sunday_hours = sunday_hours
                         )
 
-################################################################################
-
-""" Favorite stores route """
 
 @app.route('/favorites')
 def favorite_stores():
-    """ create a list of user's favorite stores """
+    """ Creates a list of user's favorite restaurants. """
 
-    # access database
     user = User.query.get_or_404(g.user.id)
-
     database_stores = FavoriteStores.query.all()
     
     store_array = []
@@ -392,29 +338,21 @@ def favorite_stores():
 @app.route('/favorite/delete/<int:id>', methods=['POST'])
 def delete_favorite_store(id):
 
-    # if 'current_user_id' in session:
     if g.user.id:
         fav_store = FavoriteStores.query.get(id)
-    
         db.session.delete(fav_store)
         db.session.commit()
-
         return redirect('/favorites')
 
-    # display this flash message
     flash("You are not authorized to delete.")
 
     return redirect('/favorites')
 
-################################################################################
-
-""" Profile updating page """
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
-    """ Update user profile for current user. Avoid passing/updating password here """
+    """ Updates user profile for current user. Avoid passing/updating password here """
 
-    # if not g.user.id:
     if 'current_user_id' not in session:
         return redirect('/')
 
@@ -430,21 +368,15 @@ def profile():
             db.session.commit()  
             flash("Profile updated successfully", "primary") 
             return redirect('/search')
+
         flash("Sorry you are unauthorized to update this page", "danger")
         return redirect('/login') 
     else:
         return render_template('/users/profile_page.html', form = form, user = user) 
 
 
-#######################################################################
-
-""" 404 Page """
-
 @app.errorhandler(404)
 def page_not_found(e):
     """ add page not found error message. set the 404 status explicitly. """
 
     return render_template('four_O_four_page.html'), 404
-
-
-##############################################################################
