@@ -24,8 +24,8 @@ class LoginForm(FlaskForm):
 class UpdateUserProfileForm(FlaskForm):
     """" User profile update form. """
 
-    firstname = StringField("firstname", validators=[DataRequired()])
-    lastname = StringField("lastname", validators=[DataRequired()])
-    username = StringField("username", validators=[DataRequired()])
-    password = PasswordField("password", validators = [Length(min = 6)]) 
+    firstname = StringField("First Name", validators=[DataRequired()])
+    lastname = StringField("Last Name", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators = [Length(min = 6)]) 
 
