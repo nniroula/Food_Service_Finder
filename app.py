@@ -21,9 +21,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
 
-#  FOR TESTING, comment out debug, Uncomment after testing
+# FOR TESTING, comment out debug, Uncomment after testing
 debug = DebugToolbarExtension(app)
 connect_db(app)
+
+api_key = API_SECRET_KEY
+BASE_URL = 'https://api.yelp.com/v3'
+BUSINESS_ENDPOINT = '/businesses/search'
+RATING = 2.5
 
 
 ######################################################################################################
@@ -135,11 +140,11 @@ def generate_random_list_of_items(arrayOfItems):
 ######################################################################################################
 """ External API Access and data retrieval as well as manipulation """
 
-api_key = API_SECRET_KEY
-BASE_URL = 'https://api.yelp.com/v3'
-BUSINESS_ENDPOINT = '/businesses/search'
+# api_key = API_SECRET_KEY
+# BASE_URL = 'https://api.yelp.com/v3'
+# BUSINESS_ENDPOINT = '/businesses/search'
 
-RATING = 2.5
+# RATING = 2.5
 
 
 @app.route('/restaurants')
@@ -199,14 +204,13 @@ def show_food_service_providers_from_api():
 
 ################################################################################
 
-""" Each restaurant's Details route """
+""" Restaurant's Details route """
 
 @app.route('/restaurant/<restaurant_id>', methods=["POST", "GET"])
 def show_details_about_restaurant(restaurant_id):
     """ use the store id to grab data from the api """
 
     headers= {"Authorization": f"Bearer {api_key}" }
-    # """ GET https://api.yelp.com/v3/businesses/{id} """
     NEEDED_API_URL = f'{BASE_URL}/businesses/{restaurant_id}'
     api_response = requests.get(NEEDED_API_URL, headers= headers)
     store_data = api_response.json()
@@ -261,14 +265,16 @@ def show_details_about_restaurant(restaurant_id):
     else:
         hrs = store_data['hours']
 
-        numbered_days = []
-        monday_hours = []
-        tuesday_hours = []
-        wednesday_hours = []
-        thursday_hours = []
-        friday_hours = []
-        saturday_hours = []
-        sunday_hours = []
+        numbered_days, monday_hours, tuesday_hours, wednesday_hours = [], [], [], []
+        thursday_hours, friday_hours, saturday_hours, sunday_hours = [], [], [], []
+        # numbered_days = []
+        # monday_hours = []
+        # tuesday_hours = []
+        # wednesday_hours = []
+        # thursday_hours = []
+        # friday_hours = []
+        # saturday_hours = []
+        # sunday_hours = []
         
         first_data_in_hours = hrs[0] 
         list_of_hours_for_seven_days = first_data_in_hours['open']
@@ -380,11 +386,15 @@ def delete_favorite_store(id):
 
 ################################################################################
 
-""" Profile page """
+""" Profile updating page """
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
     """Update profile for current user. Avoid passing password here"""
+
+    # if not g.user.id:
+    if 'current_user_id' in session:
+        return redirect('/')
 
     user = User.query.get_or_404(g.user.id)           
     form = UpdateUserProfileForm(obj = user)   
@@ -402,3 +412,32 @@ def profile():
         return redirect('/login') 
     else:
         return render_template('/users/profile_page.html', form = form, user = user) 
+
+
+#######################################################################
+
+""" 404 Page """
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # set the 404 status explicitly
+    return render_template('four_O_four_page.html'), 404
+
+
+
+##############################################################################
+# Turn off all caching in Flask
+#   (useful for dev; in production, this kind of stuff is typically
+#   handled elsewhere)
+#
+# https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+
+# @app.after_request
+# def add_header(req):
+#     """Add non-caching headers on every request."""
+
+#     req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     req.headers["Pragma"] = "no-cache"
+#     req.headers["Expires"] = "0"
+#     req.headers['Cache-Control'] = 'public, max-age=0'
+#     return req 
