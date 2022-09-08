@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 from secret import API_SECRET_KEY
 from models import FavoriteStores, db, connect_db, User
-from forms import AddAUserForm, LoginForm
+from forms import AddAUserForm, LoginForm, UpdateUserProfileForm
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError 
 
@@ -379,3 +379,80 @@ def delete_favorite_store(id):
     return redirect('/favorites')
 
 ################################################################################
+
+""" Profile page """
+
+@app.route('/users/profile', methods=["GET", "POST"])
+def profile():
+    """Update profile for current user. Avoid passing password here"""
+
+    user = User.query.get_or_404(g.user.id)           
+    form = UpdateUserProfileForm(obj = user)   
+    
+    if form.validate_on_submit():
+        if User.authenticate(user.username, form.password.data):
+            user.firstname = form.firstname.data
+            user.lastname = form.lastname.data
+            user.username = form.username.data
+        
+            db.session.commit()  
+            flash("Profile updated successfully", "primary") 
+            return redirect('/search')
+        flash("Sorry you are unauthorized to update this page", "danger")
+        return redirect('/login') 
+    else:
+        return render_template('/users/profile_page.html', form = form, user = user) 
+
+
+
+
+
+
+
+
+
+# @app.route('/profile')
+# def user_profile():
+
+#     if 'current_user_id' in session:
+#         # render html form prepopulated
+#         return render_template('/users/profile_page.html')
+#     else:
+#         return redirect('/')@app.route('/profile')
+
+# @app.route('/users/profile', methods=["GET", "POST"])
+# def user_profile():
+
+#     user = User.query.get_or_404(g.user.id)
+#     form = UpdateUserProfileForm(obj = user)
+#     print(f'user id in profile page is {g.user.id}')
+#     print(user.firstname)
+#     print(user.lastname)
+
+#     # if 'current_user_id' in session:
+#     if g.user.id:
+    
+
+#         return render_template('/users/profile_page.html', user = user, form = form)
+#     else:
+#         flash('You are unauthorized!')
+#         return redirect('/')
+
+
+
+
+
+#     form = AddAUserForm()
+#    if form.validate_on_submit():
+#         try:
+#             first_name=form.firstname.data
+#             last_name=form.lastname.data
+#             user_name=form.username.data
+#             pass_word=form.password.data
+
+#         @app.route('/users/<int:user_id>')
+#     def users_show(user_id):
+#     """Show user profile."""                   
+
+#     user = User.query.get_or_404(user_id)
+  

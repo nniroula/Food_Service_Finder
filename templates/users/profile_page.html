@@ -3,5 +3,48 @@
 {% block title %} Profile Page {% endblock %}
 
 {% block content %}
-    <h1> This is a Profile page </h1>
+    <h2> Your Profile</h2>
+<!-- 
+    {{ user.firstname }}
+    {{ user.lastname }}
+    {{ user.username }}
+    {{user.password }} -->
+
+
+ 
+
+    {% for msg in get_flashed_messages() %}
+        <p>{{msg}}</p>
+    {% endfor %}
+
+    <!-- <form method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.widget.input_type != 'hidden' %}
+            <p>
+                {{ field.label }}
+                {{ field }}
+            </p>
+        {% endfor %}
+        <button>Edit profile </button>
+    </form> -->
+
+    <form method="POST" id="user_form">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+            <p>
+                {{ field.label }}
+                {{ field(placeholder=field.label.text) }}
+            </p>
+        {% endfor %}
+
+        <p>To confirm changes, enter your password:</p>
+            {{ form.password(placeholder="Enter your password to confirm") }}
+
+        <div>
+          <button>Edit</button>
+        </div>
+      </form>
+
 {% endblock %}
+

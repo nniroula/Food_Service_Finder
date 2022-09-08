@@ -20,15 +20,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=6)])
 
 
-# # Needs a form to update/edit a profile 
-# class UpdateUserProfileForm(FlaskForm):
-#     """"Profile update form """
+# Needs a form to update/edit a profile 
+class UpdateUserProfileForm(FlaskForm):
+    """"Profile update form """
 
-#     firstname = StringField("firstname", validators=[DataRequired()])
-#     lastname = StringField("lastname", validators=[DataRequired()])
-#     username = StringField("username", validators=[DataRequired()])
-#     password = StringField("password", validators = [Length(min = 6)]) 
-#     image_url = StringField("Image url")
+    firstname = StringField("firstname", validators=[DataRequired()])
+    lastname = StringField("lastname", validators=[DataRequired()])
+    username = StringField("username", validators=[DataRequired()])
+    password = PasswordField("password", validators = [Length(min = 6)]) 
 
-
-   
+    # password = PasswordField("password", render_kw={'readonly': True}, validators = [Length(min = 6)]) 
