@@ -80,6 +80,21 @@ def signup():
             user_name=form.username.data
             pass_word=form.password.data
 
+            alphabet_only_firstname = first_name.isalpha() # true or false
+            if alphabet_only_firstname == False:
+                flash("Invalid first name! It contains only letters.")
+                return render_template('/users/signup_form.html', form = form)
+
+            alphabet_only_lastname = last_name.isalpha() 
+            if alphabet_only_lastname == False:
+                flash("Invalid last name! It contains only letters.")
+                return render_template('/users/signup_form.html', form = form)
+            
+            alphanumeric_username = user_name.isalnum() 
+            if alphanumeric_username == False:
+                flash("Invalid username! It contains only letters and numbers.")
+                return render_template('/users/signup_form.html', form = form)
+
             hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
             user = User.signup(first_name, last_name, user_name, hashed_pwd)
 
@@ -87,9 +102,7 @@ def signup():
             db.session.commit()
             flash('Signed up successfully!')
             flash('Please login to verify your credentials')
-
             return redirect("/login")
-
         except IntegrityError:
             flash("Username already taken.")
             flash("please signup with a different username.")
