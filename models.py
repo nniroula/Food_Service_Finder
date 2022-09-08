@@ -1,4 +1,4 @@
-"""SQLAlchemy models for capstone 1 project """
+""" SQLAlchemy models for local restaurants finder app. """
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -6,10 +6,9 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-# #################################################
 
 class User(db.Model):
-    """User in the website."""
+    """ User in the website."""
 
     __tablename__ = 'users'
 
@@ -36,16 +35,10 @@ class User(db.Model):
         unique=True,
     )
 
-    # image_url = db.Column(
-    #     db.Text,
-    #     default="/static/images/default-profile-icon.png",
-    # )
-
-    password = db.Column(       # think about password
-        db.Text,      # db.String, db.Binary(60)
+    password = db.Column(
+        db.Text,      
         nullable=False,
     )
-
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}>"
@@ -63,21 +56,17 @@ class User(db.Model):
             # password=hashed_pwd,
             password=password,
         )
-        # image_url=image_url
 
         # db.session.add(user)
-
         return user
 
     @classmethod
     def authenticate(cls, username, password):
         """Find user with `username` and `password`.
 
-        This is a class method (call it on the class, not an individual user.)
-        It searches for a user whose password hash matches this password
-        and, if it finds such a user, returns that user object.
-
-        If can't find matching user (or if password is wrong), returns False.
+        This is a class method. So, call it on the class, not an individual user. It searches for a user whose 
+        password hash matches this password and, if it finds such a user, returns that user object. If can't find 
+        matching user (or if password is wrong), returns False.
         """
 
         user = User.query.filter_by(username=username).first()
@@ -121,14 +110,8 @@ class FavoriteStores(db.Model):
     user = db.relationship('User')
 
 
-# #################################################
-
-# goes at the end
 def connect_db(app):
-    """Connect this database to provided Flask app.
-
-    Call this in the Flask app.
-    """
+    """Connect this database to provided Flask app. Call this in the Flask app."""
 
     db.app = app
     db.init_app(app)
