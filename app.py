@@ -9,7 +9,6 @@ from sqlalchemy.exc import IntegrityError
 
 bcrypt = Bcrypt()
 
-# current user to track login status
 CURRENT_USER_ID = "current_user_id"
 USER_ID_IN_ACTION = -1
 
@@ -35,11 +34,14 @@ RATING = 2.5
 
 @app.route('/')
 def home():
+    """ renders the base url of the local restaurants finder web app."""
     return render_template('home-page.html')
 
-# secret route, you cannot access this route without being logged in
+
 @app.route('/search')
 def search_restaurants():
+    """ secret route, you cannot access this route without being logged in. """
+
     if  "current_user_id" not in session:
         flash("You must be logged in to search for restaurants.")
         return redirect('/')
@@ -47,13 +49,9 @@ def search_restaurants():
         return render_template('/cities/city_form.html')
 
 
-######################################################################################################
-
-""" User route, signup, login, logout """
-
 @app.before_request
 def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
+    """Add current logged in user to Flask global."""
 
     if CURRENT_USER_ID in session:
         g.user = User.query.get(session[CURRENT_USER_ID])
@@ -64,6 +62,7 @@ def add_user_to_g():
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
+    """ Create a user account. """
 
     form = AddAUserForm()
 
@@ -85,8 +84,8 @@ def signup():
             return redirect("/login")
 
         except IntegrityError:
-            flash("Username already taken")
-            flash("please signup with a different username")
+            flash("Username already taken.")
+            flash("please signup with a different username.")
             return render_template('users/signup_form.html', form=form)
   
     return render_template('/users/signup_form.html', form = form)
@@ -94,6 +93,24 @@ def signup():
  
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    """ Allows a user to login. Checks if the user is not yet signed up, and also if password and username are valid."""
+
+    # form = LoginForm()
+    # if form.validate_on_submit(): 
+    #     user_name = form.username.data
+    #     pass_word = form.password.data
+
+    #     user = User.authenticate(user_name, pass_word)
+
+    #     if user:
+    #         session["current_user_id"] = user.id
+    #         flash(f"Hello, {user.username}!, you are logged in")
+    #         flash('Enter city and state to search for local restaurant')
+    #         return redirect('/search')
+    #     flash("Invalid credentials. Please enter valid user name and password.")
+    #     return render_template('/users/login_form.html', form = form)
+       
+    # return render_template('/users/login_form.html', form=form)
 
     form = LoginForm()
 
@@ -101,21 +118,26 @@ def login():
         user_name = form.username.data
         pass_word = form.password.data
 
-        user = User.authenticate(user_name, pass_word)
-
-        if user:
-            session["current_user_id"] = user.id
-    
-            flash(f"Hello, {user.username}!, you are logged in")
-            flash('Enter city and state to search for local restaurant')
-
-            # protected route, cannot see without logging in
-            return redirect('/search')
-        # flash("Invalid credentials.", 'danger')
-        flash("Invalid credentials. Try again.")
-        # return render_template('/users/login_form.html')
+        try:
+            user = User.authenticate(user_name, pass_word)
+        except:
+            flash("User does not exist! Please enter a valid user name or sign up to create an account.")
+            return render_template('/users/login_form.html', form = form)
+        else:
+            if user:
+                session["current_user_id"] = user.id
+        
+                flash(f"Hello, {user.username}!, you are logged in.")
+                flash('Enter city and state to search for local restaurants.')
+                return redirect('/search')
+            flash("Invalid password! Please enter a valid password.")
+            return render_template('/users/login_form.html', form = form)
        
     return render_template('/users/login_form.html', form=form)
+
+
+
+
 
 @app.route('/logout')
 def logout():
@@ -390,10 +412,10 @@ def delete_favorite_store(id):
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
-    """Update profile for current user. Avoid passing password here"""
+    """ Update user profile for current user. Avoid passing/updating password here """
 
     # if not g.user.id:
-    if 'current_user_id' in session:
+    if 'current_user_id' not in session:
         return redirect('/')
 
     user = User.query.get_or_404(g.user.id)           
@@ -420,24 +442,9 @@ def profile():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # set the 404 status explicitly
+    """ add page not found error message. set the 404 status explicitly. """
+
     return render_template('four_O_four_page.html'), 404
 
 
-
 ##############################################################################
-# Turn off all caching in Flask
-#   (useful for dev; in production, this kind of stuff is typically
-#   handled elsewhere)
-#
-# https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
-
-# @app.after_request
-# def add_header(req):
-#     """Add non-caching headers on every request."""
-
-#     req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-#     req.headers["Pragma"] = "no-cache"
-#     req.headers["Expires"] = "0"
-#     req.headers['Cache-Control'] = 'public, max-age=0'
-#     return req 
