@@ -103,6 +103,7 @@ def signup():
             flash('Signed up successfully!')
             flash('Please login to verify your credentials')
             return redirect("/login")
+
         except IntegrityError:
             flash("Username already taken.")
             flash("Please signup with a different username.")
@@ -141,7 +142,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    """ logs a user in session out."""
+    """ logs out a currently logged in user."""
 
     if CURRENT_USER_ID in session:
         session.pop(CURRENT_USER_ID)
@@ -159,18 +160,15 @@ def show_food_service_providers_from_api():
     api_data = api_response.json()
     api_stores_object = api_data['businesses']
 
-    suggested_stores_array = []
-    other_stores_array = []
+    suggested_stores_array, other_stores_array = [], []
 
     for store in api_stores_object:
-        suggested_stores_object = {}
-        other_stores_object = {}
+        suggested_stores_object, other_stores_object = {}, {}
   
-        if(store['rating'] >= RATING):
+        if store['rating'] >= RATING:
             suggested_stores_object['name'] = store['name']
             suggested_stores_object['id'] = store['id']
             suggested_stores_array .append(suggested_stores_object)
-    
         else:
             other_stores_object['name'] = store['name']
             other_stores_object['id'] = store['id']
@@ -179,14 +177,14 @@ def show_food_service_providers_from_api():
     length_of_suggested_stores_array = len(suggested_stores_array)
     length_of_other_stores_array = len(other_stores_array)
 
-    if(length_of_suggested_stores_array > 12):
+    if length_of_suggested_stores_array > 12:
         list_of_randomly_selected_suggested_restaurants = generate_random_list_of_items(suggested_stores_array)
         suggested_stores_array.clear()
 
         for restaurant in list_of_randomly_selected_suggested_restaurants:
             suggested_stores_array.append(restaurant)
     
-    if(length_of_other_stores_array > 12):
+    if length_of_other_stores_array > 12:
         list_of_randomly_selected_other_restaurants = generate_random_list_of_items(other_stores_array)
         other_stores_array.clear()
 
@@ -222,10 +220,7 @@ def show_details_about_restaurant(restaurant_id):
             store_name = store_data['name']
             restaurant_phone = store_data['display_phone']
 
-            favorite_store = FavoriteStores(
-                store_name = store_name, 
-                user_id = g.user.id,
-                store_phone = restaurant_phone,
+            favorite_store = FavoriteStores(store_name = store_name, user_id = g.user.id, store_phone = restaurant_phone,
                 store_address = address_to_string
             )
 
@@ -251,11 +246,8 @@ def show_details_about_restaurant(restaurant_id):
     if 'hours' not in keys:
         hours_unavailable = -1
 
-        return render_template('/stores/restaurant-details.html', 
-            store_data = store_data,
-            address =  address_to_string,
-            hours_unavailable = hours_unavailable
-        )
+        return render_template('/stores/restaurant-details.html', store_data = store_data, address =  address_to_string,
+            hours_unavailable = hours_unavailable)
     else:
         hrs = store_data['hours']
 
@@ -358,7 +350,6 @@ def delete_favorite_store(id):
         return redirect('/favorites')
 
     flash("You are not authorized to delete.")
-
     return redirect('/favorites')
 
 
