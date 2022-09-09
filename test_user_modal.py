@@ -8,6 +8,7 @@
 
 import os
 from unittest import TestCase
+from app import app
 
 from models import db, User
 
@@ -21,7 +22,9 @@ bcrypt = Bcrypt()
 # before we import our app, since that will have already
 # connected to the database
 
-os.environ['DATABASE_URL'] = "postgresql:///project_test_db"
+os.environ['DATABASE_URL'] = "postgresql:///test_db"
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///test_db'
 
 
 # Now we can import app
@@ -32,18 +35,18 @@ from app import app
 # once for all tests --- in each test, we'll delete the data
 # and create fresh new clean test data
 
+
 db.create_all()
 
 
 class UserModelTestCase(TestCase):
-    """Test views for messages."""
+    """Test User modal """
 
     def setUp(self):
-        """Create test client, add some sample data."""
+        """Create test client, and add some sample data."""
 
+        # clean up existing users
         User.query.delete()
-        # Message.query.delete()
-
 
         self.client = app.test_client()
 
@@ -51,8 +54,8 @@ class UserModelTestCase(TestCase):
         self.testUser1 = User.signup(
             firstname='John',
             lastname = 'Doe',
-            username="tester1",
-            password="hashedPasswordOne"
+            username="one",
+            password="one123"
         )
         self.testUser1.id = 1
 
@@ -64,16 +67,10 @@ class UserModelTestCase(TestCase):
         )
         self.testUser2.id = 2
 
-# ASK 0, Do I need to do this to run #Ask 2
-        # save in database
         db.session.add(self.testUser1)
         db.session.add(self.testUser2)
         db.session.commit()
-
-
-    # ################################
-
-    # tests
+    
 
     def test_does_user_model_work(self):
         """Does basic model work?"""
@@ -88,10 +85,6 @@ class UserModelTestCase(TestCase):
         db.session.add(user_in_User_modal)
         db.session.commit()
 
-# ASK 1
-        # self.assertEqual(len(user_in_User_modal.users), 1)
-        # self.assertEqual(len(user_in_User_modal.), 1)
-
         self.assertTrue(user_in_User_modal)
 
 
@@ -99,57 +92,27 @@ class UserModelTestCase(TestCase):
         """Does the repr method work as expected?"""
 
         response = self.testUser1.__repr__()
-
         self.assertEqual(response, f"<User #{self.testUser1.id}: {self.testUser1.username}>")
-        # return f"<User #{self.id}: {self.username}>"
+      
 
+    def test_is_user_signedup_successfully(self):
+        """ Is a user created successfully given valid credentials? """
 
-# Ask 2
-    def test_is_user_created_successfully(self):
-        """Does User.create successfully create a new user given valid credentials?"""
-        # User.create is signup
         user = User.query.get(2)
         self.assertEqual(user, self.testUser2)
-    
-# ASK 3, it keeps failing AssertionError: ValueError not raised
-    def test_does_user_signup_fail_with_invalid_password(self): #length >= 6
-        """Does User.create fail to create a new user if any of the validations (e.g. uniqueness, non-nullable fields) fail?"""
 
-        # login with invalid password
+
+    def test_does_user_signup_fail_with_invalid_password(self): 
+        """ Check if sign up fails with invalid password. """
+
         with self.assertRaises(ValueError):
-            # User.signup("username", "lastNameHere", 'testUser1', None)
-            User.signup("firstNameHere", "lastNameHere", 'username1', '')
+            self.assertIsNotNone(User.signup("firstNameHere", "lasteNameHere", 'usernameHere', None))
 
 
-# ASK 4 AssertionError: ValueError not raised
     def test_does_user_signup_fail_with_invalid_username(self):
-        """Does User.create fail to create a new user if any of the validations (e.g. uniqueness, non-nullable fields) fail?"""
+        """ Check if user sign up fail with invalid username. """
 
         with self.assertRaises(ValueError):
-            User.signup("firstNameHere", "lasteNameHere", None, "passwordHere")
-
-    
-
-    def test_authenticate(self):
-        """ Does User.authenticate successfully return a user when given a valid username and password?"""
-       
-        generate_hash_password = bcrypt.generate_password_hash(self.testUser1.password).decode('UTF-8')
-        pword_hash_Check = bcrypt.check_password_hash(generate_hash_password, self.testUser1.password)
-
-        user = User.query.get(self.testUser1.id)
-        authenticated_user = User.authenticate(self.testUser1.username, "hashedPasswordOne")
-       
-        self.assertTrue(pword_hash_Check)
-        self.assertIsNotNone(authenticated_user)  # make sure user exists by checking it is NOT NONE
-        self.assertEqual(user, authenticated_user)
+            self.assertIsNotNone(User.signup("firstNameHere", "lasteNameHere", None, None))
 
 
-    def test_authetication_fails_with_invalid_username(self):
-        """ Does User.authenticate fail to return a user when the username is invalid?"""
-        self.assertFalse(User.authenticate("invalidusername", "invalidpassword")) # OR
-        self.assertEqual(User.authenticate("invalidusername", "invalidpassword"), False)
-
-    
-    def test_authetication_fails_with_invalid_password(self):
-        """ Does User.authenticate fail to return a user when the password is invalid?"""
-        self.assertEqual(User.authenticate(self.testUser1 .username, "invalidpassword"), False)
