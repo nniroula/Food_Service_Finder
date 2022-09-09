@@ -80,7 +80,7 @@ def signup():
             user_name=form.username.data
             pass_word=form.password.data
 
-            alphabet_only_firstname = first_name.isalpha() # true or false
+            alphabet_only_firstname = first_name.isalpha()
             if alphabet_only_firstname == False:
                 flash("Invalid first name! It contains only letters.")
                 return render_template('/users/signup_form.html', form = form)
@@ -105,7 +105,7 @@ def signup():
             return redirect("/login")
         except IntegrityError:
             flash("Username already taken.")
-            flash("please signup with a different username.")
+            flash("Please signup with a different username.")
             return render_template('users/signup_form.html', form=form)
   
     return render_template('/users/signup_form.html', form = form)
