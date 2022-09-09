@@ -2,9 +2,8 @@
 
 # run these tests like:
 # In your venv folder, run following command
-#
-#  python -m unittest test_user_modal.py or 
-#  FLASK_ENV=production python -m unittest test_user_model.py
+#  (venv)$ python -m unittest test_user_modal.py or 
+#  (venv)$ FLASK_ENV=production python -m unittest test_user_model.py
 
 
 import os
@@ -12,8 +11,7 @@ from unittest import TestCase
 
 from models import db, User
 
-
-from sqlalchemy.exc import IntegrityError
+# from sqlalchemy.exc import IntegrityError
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
