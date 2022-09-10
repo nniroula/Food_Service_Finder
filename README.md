@@ -6,7 +6,6 @@ This app can be used to find local restaurants based on the city and state. It i
 
 <br>
 
-
 ### User interfacing
 - The first time user has to sign up for the account. Once signed up, you will be directed to the login page where you hav to login to verify your credentials. The recurring user can click on login button to log in to the site. 
 - Once logged in, you will have the option to search for the local restaurants. 
