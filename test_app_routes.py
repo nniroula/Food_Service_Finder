@@ -2,8 +2,8 @@
 
 # run these tests like:
 #
-#   python -m unittest test_integration_routes.py or
-#   FLASK_ENV=production python -m unittest test_integration_routes.py
+#   python -m unittest test_app_routes.py or
+#   FLASK_ENV=production python -m unittest test_app_routes.py
 
 import os
 from unittest import TestCase
