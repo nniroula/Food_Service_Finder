@@ -50,7 +50,6 @@ class UserModelTestCase(TestCase):
 
         self.client = app.test_client()
 
-      # Create Users
         self.testUser1 = User.signup(
             firstname='John',
             lastname = 'Doe',
