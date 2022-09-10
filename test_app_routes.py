@@ -48,14 +48,6 @@ class UserViewsTestCase(TestCase):
         )
         self.testUser2.id = 2
 
-        self.testUser3 = User.signup(
-            firstname='prabha',
-            lastname = 'niroula',
-            username="tester3",
-            password="hashedPasswordThree",
-        )
-        self.testUser3.id = 3
-
         db.session.commit()
 
 
@@ -71,26 +63,15 @@ class UserViewsTestCase(TestCase):
             html = res.get_data(as_text=True)
 
             self.assertEqual(res.status_code, 200)
-            # self.assertIn("Name of Restaurant", html)
 
 
-# ASK 5 how to get restaurant id
-    def test_show_restaurant_details(self):
-        """Check route for restaurant details"""
+    def test_secret_route_redirects_to_home_page(self):
+        """Check that private route redirect to the home page if accessed before logging in. """
 
         with self.client as client:
-            with client.session_transaction() as sess:
-                sess['current_user'] = self.testUser1.id
+            res = client.get(f"/search")
+            self.assertEqual(res.status_code, 302)
 
-            # res = client.get("/logout")
-            # self.assertEqual(res.status_code, 302)
-            # self.assertEqual(res.location, 'http://localhost/login')
-
-        # with self.client as client:
-        #     # res = client.get(f"/restaurant/{self.restaurant.id}")
-        #     res = client.get(f"/restaurant/{restaurant.id}")
-        #     self.assertEqual(res.status_code, 200)
-            # self.assertIn("Name of Restaurant", str(res.data))
 
     def test_login(self):
         """Make sure that login route works as expected """
@@ -101,6 +82,7 @@ class UserViewsTestCase(TestCase):
 
             self.assertEqual(res.status_code, 200)
             self.assertIn('<h4>Please login</h4>', html)
+
 
     def test_logout(self):
         """Confirm that logout route works correctly"""
@@ -114,63 +96,18 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(res.location, 'http://localhost/login')
 
 
-    # def test_route_for_retrieving_restaurants_from_api(self):
-    #     """Check route for following another user """
+    def test_profile_route_redirects_to_home_page_before_login(self):
+        """Check route for user profile before a user is logged in. """
 
-    #     with self.client as client:
-    #         with client.session_transaction() as sess:
-    #             sess[CURR_USER_KEY] = self.u1.id
-
-    #         res = client.get(f"/users/{self.u1_id}/followers")
-    #         self.assertEqual(res.status_code, 200)
-    #         self.assertIn("@TestUsername1", str(res.data))
-
-    #     # user not in session
-    #     with self.client as client:
-    #         res = client.get(f"users/{self.u1_id}/followers")
-    #         self.assertLessEqual(res.status_code, 302)
-    #         self.assertIn("@TestUsername1", str(res.data))
+        with self.client as client:
+            res = client.get(f"/users/profile")
+            self.assertEqual(res.status_code, 302)
 
 
-    # def test_show_user_following(self):
-    #     """Check route for following another user """
+    def test_four_o_four_route(self):
+        """Check that invalid route renders 404 page. """
+        with self.client as client:
+            res = client.get('/invalidroute')
+            html = res.get_data(as_text=True)
 
-    #     with self.client as client:
-    #         with client.session_transaction() as sess:
-    #             sess[CURR_USER_KEY] = self.u1.id
-
-    #         res = client.get(f"/users/{self.u1_id}/followers")
-    #         self.assertEqual(res.status_code, 200)
-    #         self.assertIn("@TestUsername1", str(res.data))
-
-    #     # user not in session
-    #     with self.client as client:
-    #         res = client.get(f"users/{self.u1_id}/followers")
-    #         self.assertLessEqual(res.status_code, 302)
-    #         self.assertIn("@TestUsername1", str(res.data))
-
-
-
-    # def test_show_add_like(self):
-    #     """Test a route when a message is liked"""
-    #     with self.client as client:
-    #         id = self.msg.id
-    #         with client.session_transaction() as sess:
-    #             sess[CURR_USER_KEY] = self.u1.id
-
-    #         res = client.post(f"/users/like/{id}", follow_redirects=True)
-    #         self.assertEqual(res.status_code, 200)
-
-    # def test_show_remove_like(self):
-    #     """Test a route when a message is disliked"""
-     
-    #     msg = Message.query.filter(Message.text=="Test Message").one()  # Get message from Database
-    #     self.assertIsNotNone(msg)
-    #     self.assertNotEqual(msg.user_id, self.u1_id)
-
-    #     with self.client as client:
-    #         with client.session_transaction() as sess:
-    #             sess[CURR_USER_KEY] = self.u1_id
-
-    #         resp = client.post(f"/users/like/{msg.id}", follow_redirects=True)
-    #         self.assertEqual(resp.status_code, 200)
+            self.assertEqual(res.status_code, 404)
