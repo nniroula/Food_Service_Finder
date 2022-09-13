@@ -6,7 +6,7 @@ from models import FavoriteStores, db, connect_db, User
 from forms import AddAUserForm, LoginForm, UpdateUserProfileForm
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError 
-import random
+import random, os
 
 bcrypt = Bcrypt()
 
@@ -16,14 +16,23 @@ USER_ID_IN_ACTION = -1
 app = Flask(__name__)  
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
-app.config['SECRET_KEY'] = "nosecretkeyhere"
+# app.config['SECRET_KEY'] = "nosecretkeyhere"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
+
 
 # FOR TESTING, comment out debug, Uncomment after testing
 debug = DebugToolbarExtension(app)
+
+# 
+# db.create_all()
+# db.session.commit()
+
+# 
 connect_db(app)
+db.create_all()
 
 api_key = API_SECRET_KEY
 BASE_URL = 'https://api.yelp.com/v3'
@@ -34,8 +43,12 @@ RATING = 2.5
 def generate_random_list_of_items(arrayOfItems):
     """ generates a list of 12 randomly selected items from a list """
 
-    list_of_twelve_random_items = random.sample(arrayOfItems, 12)
-    return list_of_twelve_random_items
+    if len(arrayOfItems) < 12:
+        list_of_random_items = random.sample(arrayOfItems, len(arrayOfItems))
+    else:
+        list_of_random_items  = random.sample(arrayOfItems, 12)
+
+    return  list_of_random_items 
 
 
 @app.route('/')
@@ -95,18 +108,24 @@ def signup():
                 flash("Invalid username! It contains only letters and numbers.")
                 return render_template('/users/signup_form.html', form = form)
 
-            hashed_pwd = bcrypt.generate_password_hash(pass_word).decode("utf8") 
-            user = User.signup(first_name, last_name, user_name, hashed_pwd)
+            existing_user = User.query.filter_by(username = user_name).first()
+            not_existing_user = existing_user == None
 
-            db.session.add(user)
-            db.session.commit()
-            flash('Signed up successfully!')
-            flash('Please login to verify your credentials')
-            return redirect("/login")
+            if not_existing_user == True:
+                user = User.signup(first_name, last_name, user_name, pass_word)
+
+                db.session.add(user)
+                db.session.commit()
+
+                flash('Signed up successfully!')
+                flash('Please login to verify your credentials')
+                return redirect("/login")
+            else:
+                flash("Username already taken.")
+                flash("Please signup with a different username.")
+                return render_template('users/signup_form.html', form=form)
 
         except IntegrityError:
-            flash("Username already taken.")
-            flash("Please signup with a different username.")
             return render_template('users/signup_form.html', form=form)
   
     return render_template('/users/signup_form.html', form = form)
@@ -224,29 +243,36 @@ def show_details_about_restaurant(restaurant_id):
                 store_address = address_to_string
             )
 
-            result = False
+            # for the first time, database table for favorite store is empty
+            if len(stores_in_db) == 0:
+                db.session.add(favorite_store)
+                db.session.commit()
+                return redirect('/favorites')
 
-            for store in stores_in_db:
-                address_userId = favorite_store.store_address != store.store_address and favorite_store.user_id != store.user_id
-                phone_userId = favorite_store.store_phone != store.store_phone and favorite_store.user_id != store.user_id
-                name_userId = favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id
-         
-                if address_userId == True or phone_userId == True or name_userId == True:
-                    result = True
-                else:
-                    result = False
+            else:
+                result = False
 
-                if result == True:
-                    db.session.add(favorite_store)
-                    db.session.commit()
+                for store in stores_in_db:
+                    address_userId = favorite_store.store_address != store.store_address and favorite_store.user_id != store.user_id
+                    phone_userId = favorite_store.store_phone != store.store_phone and favorite_store.user_id != store.user_id
+                    name_userId = favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id
+            
+                    if address_userId == True or phone_userId == True or name_userId == True:
+                        result = True
+                    else:
+                        result = False
 
-            return redirect('/favorites')
+                    if result == True:
+                        db.session.add(favorite_store)
+                        db.session.commit()
+
+                return redirect('/favorites')
 
     # if request.method == 'GET':
     if 'hours' not in keys:
         hours_unavailable = -1
 
-        return render_template('/stores/restaurant-details.html', store_data = store_data, address =  address_to_string,
+        return render_template('/stores/restaurant-details.html', store_data = store_data, address = address_to_string,
             hours_unavailable = hours_unavailable)
     else:
         hrs = store_data['hours']
@@ -324,11 +350,12 @@ def favorite_stores():
 
     user = User.query.get_or_404(g.user.id)
     database_stores = FavoriteStores.query.all()
-    
     store_array = []
+
     for store in database_stores:
         store_object = {}
         if store.user_id == user.id:
+            
             store_object['name'] = store.store_name
             store_object['phone'] = store.store_phone
             store_object['address'] = store.store_address
@@ -355,7 +382,7 @@ def delete_favorite_store(id):
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
-    """ Updates user profile for current user. Avoid passing/updating password here """
+    """ Updates user profile for current user. Avoid passing/updating password here. """
 
     if 'current_user_id' not in session:
         return redirect('/')

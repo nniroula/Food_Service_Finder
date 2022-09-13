@@ -3,6 +3,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
@@ -45,20 +46,18 @@ class User(db.Model):
 
     @classmethod
     def signup(cls, firstname, lastname, username, password):
-        """Sign up user. Hashes password and adds user to system."""
+        """ Signs up a user. """
 
-        # hashed_pwd = bcrypt.generate_password_hash(password).decode('utf8')
-        # if firstname != ''
+        hashed_pwd = bcrypt.generate_password_hash(password).decode("utf8") 
+
         user = cls(
             firstname=firstname,
             lastname=lastname,
             username=username,
-            # password=hashed_pwd,
-            password=password,
+            password=hashed_pwd
         )
-
-        # db.session.add(user)
         return user
+                
 
     @classmethod
     def authenticate(cls, username, password):
@@ -71,7 +70,7 @@ class User(db.Model):
 
         user = User.query.filter_by(username=username).first()
   
-        verify = bcrypt.check_password_hash(user.password, password) #(password_from_db, userinput_password)
+        verify = bcrypt.check_password_hash(user.password, password)
         if user and verify:
             return user
 
