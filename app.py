@@ -233,7 +233,7 @@ def show_details_about_restaurant(restaurant_id):
     keys = store_data.keys()
 
     if request.method == 'POST':
-        stores_in_db = FavoriteStores.query.all()
+        fav_stores_in_db = FavoriteStores.query.all()
 
         if 'current_user_id' in session:
             store_name = store_data['name']
@@ -244,7 +244,7 @@ def show_details_about_restaurant(restaurant_id):
             )
 
             # for the first time, database table for favorite store is empty
-            if len(stores_in_db) == 0:
+            if len(fav_stores_in_db) == 0:
                 db.session.add(favorite_store)
                 db.session.commit()
                 return redirect('/favorites')
@@ -252,10 +252,10 @@ def show_details_about_restaurant(restaurant_id):
             else:
                 result = False
 
-                for store in stores_in_db:
-                    address_userId = favorite_store.store_address != store.store_address and favorite_store.user_id != store.user_id
-                    phone_userId = favorite_store.store_phone != store.store_phone and favorite_store.user_id != store.user_id
-                    name_userId = favorite_store.store_name != store.store_name and favorite_store.user_id != store.user_id
+                for store in fav_stores_in_db:
+                    address_userId = favorite_store.store_address != store.store_address 
+                    phone_userId = favorite_store.store_phone != store.store_phone 
+                    name_userId = favorite_store.store_name != store.store_name 
             
                     if address_userId == True or phone_userId == True or name_userId == True:
                         result = True
@@ -265,8 +265,9 @@ def show_details_about_restaurant(restaurant_id):
                     if result == True:
                         db.session.add(favorite_store)
                         db.session.commit()
-
                 return redirect('/favorites')
+
+            # return redirect('/favorites')
 
     # if request.method == 'GET':
     if 'hours' not in keys:
@@ -389,19 +390,23 @@ def profile():
 
     user = User.query.get_or_404(g.user.id)           
     form = UpdateUserProfileForm(obj = user)   
-    
+
     if form.validate_on_submit():
         if User.authenticate(user.username, form.password.data):
-            user.firstname = form.firstname.data
-            user.lastname = form.lastname.data
-            user.username = form.username.data
-        
-            db.session.commit()  
-            flash("Profile updated successfully", "primary") 
-            return redirect('/search')
-
-        flash("Sorry you are unauthorized to update this page", "danger")
-        return redirect('/login') 
+            try: 
+                user.firstname = form.firstname.data
+                user.lastname = form.lastname.data
+                user.username = form.username.data
+                db.session.commit()  
+                flash("Profile updated successfully!", "primary") 
+                return redirect('/search')
+            except IntegrityError:
+                flash('Username you are about to update is already taken!')
+                flash('If you really need to change your username, it must be unique.')
+                return render_template('/users/profile_page.html', form = form, user = user) 
+        else:
+            flash("Invalid password! You are unauthorized to update the profile.", "danger")
+        return render_template('/users/profile_page.html', form = form, user = user) 
     else:
         return render_template('/users/profile_page.html', form = form, user = user) 
 
