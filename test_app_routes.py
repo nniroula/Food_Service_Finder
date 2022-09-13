@@ -1,21 +1,13 @@
 """User Views tests."""
 
-# run these tests like:
-#
-#   python -m unittest test_app_routes.py or
-#   FLASK_ENV=production python -m unittest test_app_routes.py
-
 import os
 from unittest import TestCase
 from models import db, User
 from app import app
 
-# Before importing the app, set an environmental variable to use a different database for testinng
 os.environ['DATABASE_URL'] = "postgresql:///test_db"
-
 from app import app
 
-# Create our tables once for all tests - in each test, delete the data and create fresh new clean test data
 db.create_all()
 
 app.config["WTF_CSRF_ENABLED"] = False
@@ -31,7 +23,6 @@ class UserViewsTestCase(TestCase):
 
         self.client = app.test_client()
 
-        # Create test users
         self.testUser1 = User.signup(
             firstname='John',
             lastname = 'Doe',

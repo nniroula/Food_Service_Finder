@@ -61,8 +61,9 @@ image_url &nbsp;&nbsp; &nbsp;
   
 ### B. Testing
 #### To run test files, use the following - 
-1. cd into your project's virtual environment directory(venv folder)
-2. Run the commands: 
+1. FOR TESTING, comment out debug in app.py file, Uncomment after testing (comment debug = DebugToolbarExtension(app))
+2. cd into your project's virtual environment directory(venv folder)
+3. Run the commands: 
 ```python -m unittest test_file_name``` OR ```FLASK_ENV=production python -m unittest test_file_name```
 For example :- ```python -m unittest test_app_routes.py```
 
