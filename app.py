@@ -16,21 +16,16 @@ USER_ID_IN_ACTION = -1
 app = Flask(__name__)  
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
-# app.config['SECRET_KEY'] = "nosecretkeyhere"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
+# app.config['SECRET_KEY'] = "nosecretkeyhere"
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 
 
 # FOR TESTING, comment out debug, Uncomment after testing
 debug = DebugToolbarExtension(app)
 
-# 
-# db.create_all()
-# db.session.commit()
-
-# 
 connect_db(app)
 db.create_all()
 
@@ -49,6 +44,15 @@ def generate_random_list_of_items(arrayOfItems):
         list_of_random_items  = random.sample(arrayOfItems, 12)
 
     return  list_of_random_items 
+
+
+def alphabetic_name(name):
+    alphabet_only_name = name.isalpha()
+    return alphabet_only_name 
+
+def alphanumeric_username(username):
+    only_alphanumeric_username = username.isalnum()
+    return only_alphanumeric_username 
 
 
 @app.route('/')
@@ -93,18 +97,15 @@ def signup():
             user_name=form.username.data
             pass_word=form.password.data
 
-            alphabet_only_firstname = first_name.isalpha()
-            if alphabet_only_firstname == False:
+            if alphabetic_name(first_name) == False:
                 flash("Invalid first name! It contains only letters.")
                 return render_template('/users/signup_form.html', form = form)
-
-            alphabet_only_lastname = last_name.isalpha() 
-            if alphabet_only_lastname == False:
+            
+            if alphabetic_name(last_name) == False:
                 flash("Invalid last name! It contains only letters.")
                 return render_template('/users/signup_form.html', form = form)
-            
-            alphanumeric_username = user_name.isalnum() 
-            if alphanumeric_username == False:
+
+            if alphanumeric_username(user_name) == False:
                 flash("Invalid username! It contains only letters and numbers.")
                 return render_template('/users/signup_form.html', form = form)
 
@@ -240,15 +241,12 @@ def show_details_about_restaurant(restaurant_id):
             restaurant_phone = store_data['display_phone']
 
             favorite_store = FavoriteStores(store_name = store_name, user_id = g.user.id, store_phone = restaurant_phone,
-                store_address = address_to_string
-            )
+                store_address = address_to_string)
 
-            # for the first time, database table for favorite store is empty
             if len(fav_stores_in_db) == 0:
                 db.session.add(favorite_store)
                 db.session.commit()
                 return redirect('/favorites')
-
             else:
                 result = False
 
@@ -266,8 +264,6 @@ def show_details_about_restaurant(restaurant_id):
                         db.session.add(favorite_store)
                         db.session.commit()
                 return redirect('/favorites')
-
-            # return redirect('/favorites')
 
     # if request.method == 'GET':
     if 'hours' not in keys:
@@ -394,9 +390,24 @@ def profile():
     if form.validate_on_submit():
         if User.authenticate(user.username, form.password.data):
             try: 
-                user.firstname = form.firstname.data
-                user.lastname = form.lastname.data
-                user.username = form.username.data
+                if alphabetic_name(form.firstname.data) == False:
+                    flash("Invalid first name! It contains only letters.")
+                    return render_template('/users/profile_page.html', form = form, user = user) 
+                else:
+                    user.firstname = form.firstname.data
+
+                if alphabetic_name(form.lastname.data) == False:
+                    flash("Invalid last name! It contains only letters.")
+                    return render_template('/users/profile_page.html', form = form, user = user) 
+                else:
+                    user.lastname = form.lastname.data
+
+                if alphanumeric_username(form.username.data) == False:
+                    flash("Invalid username! It contains only letters and numbers.")
+                    return render_template('/users/profile_page.html', form = form, user = user) 
+                else:
+                    user.username = form.username.data
+
                 db.session.commit()  
                 flash("Profile updated successfully!", "primary") 
                 return redirect('/search')
@@ -408,7 +419,7 @@ def profile():
             flash("Invalid password! You are unauthorized to update the profile.", "danger")
         return render_template('/users/profile_page.html', form = form, user = user) 
     else:
-        return render_template('/users/profile_page.html', form = form, user = user) 
+        return render_template('/users/profile_page.html', form = form, user = user)
 
 
 @app.errorhandler(404)
