@@ -1,12 +1,6 @@
-
-/* div .nav-bar{
-    background-color:greenyellow;
-} */
 .links{
-   /* padding: 20px; */
    padding-left: 20px;
    padding-right: 10px;
-   /* float aligns the content to right */
    float:right 
 }
 
@@ -15,23 +9,22 @@
     color:tomato;
     padding-top: 30vh;
 }
+
 h1{
     background-color: turquoise;
 }
 
-/* .nav-bar{
-    background-color:greenyellow;
-} */
-
 .navbar-items{
     background-color:greenyellow;
-    /* position: fixed;  good for scrolling */
-    /* position:sticky */
-    /* position: relative;
-    z-index: 9999; */
-    /* position: fixed !important; */
-     /* position: sticky; */
      position: fixed;
     top: 0;
     z-index: 999
 }
+
+img {
+    display: inline-block;
+    margin-bottom: 2px;
+    margin-right: 5px;
+    width: 20px;
+    border-radius: 2px;
+  }
