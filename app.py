@@ -254,16 +254,27 @@ def show_details_about_restaurant(restaurant_id):
                     address_userId = favorite_store.store_address != store.store_address 
                     phone_userId = favorite_store.store_phone != store.store_phone 
                     name_userId = favorite_store.store_name != store.store_name 
+
+                    # import pdb
+                    # pdb.set_trace()
             
                     if address_userId == True or phone_userId == True or name_userId == True:
                         result = True
                     else:
                         result = False
 
-                    if result == True:
-                        db.session.add(favorite_store)
-                        db.session.commit()
-                return redirect('/favorites')
+                #     if result == True:
+                #         db.session.add(favorite_store)
+                #         db.session.commit()
+                # return redirect('/favorites')
+                if result == True:
+                    db.session.add(favorite_store)
+                    db.session.commit()
+                    return redirect('/favorites')
+                else:
+                    flash('The store is already in your favorite list!')
+                    # return redirect('/favorites')
+                    # restaurant/<restaurant_id>
 
     # if request.method == 'GET':
     if 'hours' not in keys:

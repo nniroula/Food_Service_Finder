@@ -2,6 +2,10 @@
 {% block title %} Restaurant details page {% endblock %}
 
 {% block content %}
+    <!-- needs styling -->
+    {% for message in get_flashed_messages() %}
+        {{message}}
+    {% endfor %}
 
     <p>Name of Restaurant: {{ store_data['name'] }}</p>
     <p>Phone number: {{ store_data['display_phone'] }}</p>
