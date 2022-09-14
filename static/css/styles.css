@@ -104,10 +104,10 @@ img {
     padding-top: 2.5rem;
     padding-bottom: 2rem;
   } */
-  .page-heading{
+.page-heading{
     padding-top: 2.5rem;
     padding-bottom: 2rem;
-  }
+}
   #signupform{
     margin-top: 0.5em;
   }
@@ -184,5 +184,20 @@ img {
 .suggested{
     margin-left: -70px;
     padding-top: 2em;
+}
+
+
+.fav-stores-heading{
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+    justify-content: center;
+    /* text-align: center; */
+    padding-left: 7vw;
+  
+}
+
+#fav-store-list{
+    /* text-align: left; */
+    margin-left: -4em;
 }
 
