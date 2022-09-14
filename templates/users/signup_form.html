@@ -3,22 +3,24 @@
 
 {% block content %}
 
-    <h2>Signup form</h2>
+    <div class="sign-up-form">
+        <h4 id="sign-up-title">Create a free account</h4>
 
-    {% for msg in get_flashed_messages() %}
-        <p>{{msg}}</p>
-    {% endfor %}
-
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {% for field in form if field.widget.input_type != 'hidden' %}
-            <p>
-                {{ field.label }}
-                {{ field }}
-            </p>
+        {% for msg in get_flashed_messages() %}
+            <p class="sign-up-error">{{msg}}</p>
         {% endfor %}
-        <button>Sign up</button>
-    </form>
+
+        <form id="signupform" method="POST">
+            {{ form.hidden_tag() }}
+            {% for field in form if field.widget.input_type != 'hidden' %}
+                <p>
+                    {{ field.label }}
+                    {{ field }}
+                </p>
+            {% endfor %}
+            <button id="sign-up-button" class="btn btn-sm {{'btn-success'}}"> Sign up</button> 
+        </form>
+    </div>
 
 {% endblock %}
 
