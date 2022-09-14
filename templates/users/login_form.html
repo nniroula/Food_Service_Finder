@@ -2,28 +2,20 @@
 {% block title %} Login Page {% endblock %}
 
 {% block content %}
-
-<div class="display-container">
-
-    <h4 class="page-heading">Please login</h4>
-
-    {% for msg in get_flashed_messages() %}
-        <!-- <p>{{msg}}</p> -->
-        <p class="sign-up-error">{{msg}}</p>
-    {% endfor %}
-
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {% for field in form if field.widget.input_type != 'hidden' %}
-            <p>
-                {{ field.label }}
-                {{ field(placeholder=field.label.text) }}
-            </p>
+    <div class="display-container">
+        <h4 class="page-heading">Please login</h4>
+        {% for msg in get_flashed_messages() %}
+            <p class="error-messages">{{msg}}</p>
         {% endfor %}
-        <!-- <button id="log-in-button">Log in</button> -->
-        <button id="log-in-button" class="btn btn-sm {{'btn-success'}}"> Log in</button> 
-    </form> 
-
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {% for field in form if field.widget.input_type != 'hidden' %}
+                <p>
+                    {{ field.label }}
+                    {{ field(placeholder=field.label.text) }}
+                </p>
+            {% endfor %}
+            <button id="log-in-button" class="btn btn-sm {{'btn-success'}}"> Log in</button> 
+        </form> 
     </div>
-
 {% endblock %} 

@@ -2,16 +2,11 @@
 {% block title %} Signup page {% endblock %}
 
 {% block content %}
-
-    <!-- <div class="sign-up-form"> -->
     <div class="display-container">
-        <!-- <h4 id="sign-up-title">Create a free account</h4> -->
         <h4 class="page-heading">Create a free account</h4>
-
         {% for msg in get_flashed_messages() %}
-            <p class="sign-up-error">{{msg}}</p>
+            <p class="error-messages">{{msg}}</p>
         {% endfor %}
-
         <form id="signupform" method="POST">
             {{ form.hidden_tag() }}
             {% for field in form if field.widget.input_type != 'hidden' %}
@@ -21,11 +16,8 @@
                 </p>
             {% endfor %}
             <button id="sign-up-button" class="btn btn-sm {{'btn-success'}}"> Sign up</button> 
-            <!-- <button class="submit-button" class="btn btn-sm {{'btn-success'}}"> Sign up</button>  -->
-            <!-- <button class="btn btn-sm {{'btn-success'}}"> Sign up</button>  -->
         </form>
     </div>
-
 {% endblock %}
 
 
