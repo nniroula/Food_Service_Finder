@@ -1,47 +1,44 @@
 
 {% extends 'base.html' %}
-
 {% block title %} Restaurants Provider {% endblock %}
 
 {% block content %}
+    <div class="restaurant-details"> 
+        {% if length_of_suggested_stores_array == 0 %}
+            <p class="suggested">Suggested Restaurant(s): </p>
+                <ul>
+                    <li>
+                        <p>No store suggestion at this time</p>
+                    </li>
+                </ul>
+        {% else %}
+            <p class="suggested">Suggested Restaurant(s): </p>
 
-    {% if length_of_suggested_stores_array == 0 %}
-        <p>Suggested Restaurant(s): </p>
-            <ul>
-                <li>
-                    <p>No store suggestion at this time</p>
-                </li>
-            </ul>
-    {% else %}
-        <p>Suggested Restaurant(s): </p>
-
-        {% for store in suggested_stores_array %}
-            <ul>
-                <li> 
-                    <a href="/restaurant/{{store['id']}}">{{ store['name'] }}</a>
-                </li> 
-            </ul>
-        {% endfor %}
-
-    {% endif %}
-
-    {% if length_of_other_stores_array == 0 %}
-        <p>More Restaurant(s) to explore: </p>
-            <ul>
-                <li>
-                    <p>No store suggestion at this time</p>
-                </li>
-            </ul>
-    {% else %}
-        <p>More Restaurant(s) to explore: </p>
-        {% for store in other_stores_array %}
-            <ul>
-                <li>  
-                    <a href="/restaurant/{{ store['id'] }}">{{ store['name'] }}</a>
-                </li> 
-            </ul>
-        {% endfor %}
-    {% endif %}
-
+            {% for store in suggested_stores_array %}
+                <ul>
+                    <li> 
+                        <a class="restaurant-links" href="/restaurant/{{store['id']}}">{{ store['name'] }}</a>
+                    </li> 
+                </ul>
+            {% endfor %}
+        {% endif %}
+        {% if length_of_other_stores_array == 0 %}
+            <p class="suggested">More Restaurant(s) to explore: </p>
+                <ul>
+                    <li>
+                        <p>No store suggestion at this time</p>
+                    </li>
+                </ul>
+        {% else %}
+            <p class="suggested">More Restaurant(s) to explore: </p>
+            {% for store in other_stores_array %}
+                <ul>
+                    <li>  
+                        <a href="/restaurant/{{ store['id'] }}">{{ store['name'] }}</a>
+                    </li> 
+                </ul>
+            {% endfor %}
+        {% endif %}
+    </div>
 {% endblock %} 
 

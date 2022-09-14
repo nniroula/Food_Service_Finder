@@ -176,3 +176,13 @@ img {
     color: red
 }
 
+.restaurant-links{
+    color: white;
+    text-decoration: none;
+}
+
+.suggested{
+    margin-left: -70px;
+    padding-top: 2em;
+}
+
