@@ -3,10 +3,13 @@
 
 {% block content %}
 
-    <h4>Please login</h4>
+<div class="display-container">
+
+    <h4 class="page-heading">Please login</h4>
 
     {% for msg in get_flashed_messages() %}
-        <p>{{msg}}</p>
+        <!-- <p>{{msg}}</p> -->
+        <p class="sign-up-error">{{msg}}</p>
     {% endfor %}
 
     <form method="POST">
@@ -17,7 +20,10 @@
                 {{ field(placeholder=field.label.text) }}
             </p>
         {% endfor %}
-        <button>Log in</button>
+        <!-- <button id="log-in-button">Log in</button> -->
+        <button id="log-in-button" class="btn btn-sm {{'btn-success'}}"> Log in</button> 
     </form> 
+
+    </div>
 
 {% endblock %} 

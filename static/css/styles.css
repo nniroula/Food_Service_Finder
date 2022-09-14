@@ -45,10 +45,13 @@ h3{
 }
 img {
     display: inline-block;
+    /* margin-bottom: 2px; */
     margin-bottom: 2px;
     margin-right: 5px;
-    width: 20px;
-    border-radius: 2px;
+    /* width: 20px; */
+    width: 25px;
+    /* border-radius: 2px; */
+    border-radius: 5px;
 }
 .search-form{
     padding-top: 3em;
@@ -77,7 +80,8 @@ img {
 
 
   /* Sign up form */
-  .sign-up-form{
+  /* .sign-up-form{ */
+.display-container{
     text-align: center;
     color:white;
      padding-bottom: 10vh;
@@ -86,8 +90,12 @@ img {
     margin-bottom: 20vh;
     margin-left: 30vw;
     margin-right: 30vw;
-  }
-  #sign-up-title{
+}
+  /* #sign-up-title{
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+  } */
+  .page-heading{
     padding-top: 2.5rem;
     padding-bottom: 2rem;
   }
@@ -100,9 +108,20 @@ img {
     padding-top: -1.5em;
 }
 #sign-up-button{
+/* .submit-button{ */
+/* .btn{ */
+/* .btn btn-sm { */
     float: right;
     margin-right: 4.5em;
     border-radius: 50%;
     padding:7px;
     /* border-radius: 40%; */
+}
+
+/* login page */
+#log-in-button{
+    float: right;
+    margin-right: 4.5em;
+    border-radius: 50%;
+    padding:7px;
 }
