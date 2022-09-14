@@ -127,14 +127,3 @@ img {
     padding:7px;
 }
 
-/* four o four */
-.display-404{
-    text-align: center;
-    color:white;
-     padding-bottom: 10vh;
-    background-color:skyblue;
-    margin-top: 20vh;
-    margin-bottom: 20vh;
-    margin-left: 30vw;
-    margin-right: 30vw;
-}
