@@ -103,7 +103,8 @@ img {
     margin-top: 0.5em;
   }
 /* .sign-up-error{ */
-.error-messages{
+/* .error-messages{ */
+.messages-display{
     color: red;
     padding-bottom: 2em;
     padding-top: -1.5em;
