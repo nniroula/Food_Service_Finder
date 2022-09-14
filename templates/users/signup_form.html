@@ -5,7 +5,7 @@
     <div class="display-container">
         <h4 class="page-heading">Create a free account</h4>
         {% for msg in get_flashed_messages() %}
-            <p class="error-messages">{{msg}}</p>
+            <p class="messages-display">{{msg}}</p>
         {% endfor %}
         <form id="signupform" method="POST">
             {{ form.hidden_tag() }}
