@@ -60,7 +60,8 @@ img {
     padding-bottom: 20px;
 }
 .form-star{
-    display: inline
+    display: inline;
+    border-radius:none
 }
 .restaurant-details-div{
     padding-top: 3em;
@@ -72,8 +73,16 @@ img {
     display: inline;
 }
 .colored-star{
-    color: orange;
-    border-color: white;
+    /* color: orange; */
+    /* color: white; */
+    /* color: orange; */
+    color:gold;
+    /* border-color: white; */
+    border-color: red;
+    /* background-color: gold; */
+}
+.colored-star :hover{
+    background: coral;
 }
 
   /* above all works good */
@@ -141,5 +150,29 @@ img {
 #password-prompt{
     /* color: green */
     color:deeppink
+}
+
+/* restaurants details page */
+.restaurant-details{
+    /* text-align: center; */
+    /* justify-content: center; */
+    padding-left: 10vw;
+    /* background-color:skyblue; */
+
+    /* color:white; */
+    padding-bottom: 10vh;
+    background-color:skyblue;
+    /* background-color:white; */
+    margin-top: 10vh;
+    margin-bottom: 20vh;
+    margin-left: 25vw;
+    /* margin-right: 30vw; */
+    margin-right: 25vw;
+    color:white
+}
+.already-in-list{
+    padding-top: 2em;
+    padding-bottom: 1px;
+    color: red
 }
 

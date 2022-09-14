@@ -2,87 +2,89 @@
 {% block title %} Restaurant details page {% endblock %}
 
 {% block content %}
-    <!-- needs styling -->
-    {% for message in get_flashed_messages() %}
-        {{message}}
-    {% endfor %}
+    <div class="restaurant-details"> 
+        {% for message in get_flashed_messages() %}
+            <p class="already-in-list">{{message}}</p>
+        {% endfor %}
 
-    <div class="restaurant-details-div">
-        <p class="restaurant-name">
-            Name of Restaurant: {{ store_data['name'] }}
-            <form class="form-detail-star" action="/restaurant/{{store_data['id']}}" method="POST">
-                <button class="btn btn-sm {{'btn-primary'}}"> <i class="fa fa-star fa-1x"></i> </button> 
-            </form>
-        </p>
-        <p>Phone number: {{ store_data['display_phone'] }}</p>
-        <p>Address: {{ address }}</p>
+        <div class="restaurant-details-div">
+            <p class="restaurant-name">
+                Name of Restaurant: {{ store_data['name'] }}
+                <form class="form-detail-star" action="/restaurant/{{store_data['id']}}" method="POST">
+                    <!-- <button class="btn btn-sm {{'btn-primary'}}"> <i class="fa fa-star fa-1x"></i> </button>  -->
+                    <button class="btn btn-outline-light"> <span class="fa fa-star colored-star fa-2x"></span> </button> 
+                </form> 
+            </p>
+            <p>Phone number: {{ store_data['display_phone'] }}</p>
+            <p>Address: {{ address }}</p>
 
-        {% if hours_unavailable == -1 %}
-            <p>Hours of Operations: </p>
-            <ul>
-                <li>
-                    hours not available
-                </li>
-            </ul>
-        {% else %}
-            <p>Hours of Operations: </p>
+            {% if hours_unavailable == -1 %}
+                <p>Hours of Operation: </p>
                 <ul>
                     <li>
-                        Monday:
-                        <ul>
-                            {% for hour in monday_hours %}
-                                <li>{{ hour }}</li>
-                        {% endfor %}
-                        </ul>
-                    </li>
-                    <li>
-                        Tuesday:
-                        <ul>
-                            {% for hour in tuesday_hours %}
-                                <li>{{ hour }}</li>
-                        {% endfor %}
-                        </ul>
-                    <li>
-                        Wednesday:
-                        <ul>
-                            {% for hour in wednesday_hours %}
-                                <li>{{ hour }}</li>
-                        {% endfor %}
-                        </ul>             
-                    <li>
-                        Thursday:
-                        <ul>
-                            {% for hour in thursday_hours %}
-                                <li>{{ hour }}</li>
-                        {% endfor %}
-                        </ul>   
-                    </li>
-                    <li>
-                        Friday:
-                        <ul>
-                            {% for hour in friday_hours %}
-                                <li> {{ hour }} </li>
-                            {% endfor %}  
-                        </ul>
-                    </li>
-                    <li>
-                        Saturday:
-                        <ul>
-                            {% for hour in saturday_hours %}
-                                <li>{{ hour }}</li>
-                        {% endfor %}
-                        </ul>
-                    </li>
-                    <li>
-                        Sunday:
-                        <ul>
-                            {% for hour in sunday_hours %}
-                                <li>{{ hour }}</li>
-                        {% endfor %}
-                        </ul>
+                        hours not available
                     </li>
                 </ul>
-        {% endif %}
+            {% else %}
+                <p>Hours of Operation: </p>
+                    <ul>
+                        <li>
+                            Monday:
+                            <ul>
+                                {% for hour in monday_hours %}
+                                    <li>{{ hour }}</li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            Tuesday:
+                            <ul>
+                                {% for hour in tuesday_hours %}
+                                    <li>{{ hour }}</li>
+                            {% endfor %}
+                            </ul>
+                        <li>
+                            Wednesday:
+                            <ul>
+                                {% for hour in wednesday_hours %}
+                                    <li>{{ hour }}</li>
+                            {% endfor %}
+                            </ul>             
+                        <li>
+                            Thursday:
+                            <ul>
+                                {% for hour in thursday_hours %}
+                                    <li>{{ hour }}</li>
+                            {% endfor %}
+                            </ul>   
+                        </li>
+                        <li>
+                            Friday:
+                            <ul>
+                                {% for hour in friday_hours %}
+                                    <li> {{ hour }} </li>
+                                {% endfor %}  
+                            </ul>
+                        </li>
+                        <li>
+                            Saturday:
+                            <ul>
+                                {% for hour in saturday_hours %}
+                                    <li>{{ hour }}</li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            Sunday:
+                            <ul>
+                                {% for hour in sunday_hours %}
+                                    <li>{{ hour }}</li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 
