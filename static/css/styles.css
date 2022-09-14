@@ -128,3 +128,18 @@ img {
     padding:7px;
 }
 
+/* profile update */
+#update-button{
+    float: right;
+    margin-right: 4.5em;
+    border-radius: 50%;
+    padding:7px;
+}
+#password-field{
+    padding-left: 4.7em;
+}
+#password-prompt{
+    /* color: green */
+    color:deeppink
+}
+
