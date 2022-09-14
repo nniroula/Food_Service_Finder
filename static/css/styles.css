@@ -1,57 +1,74 @@
-.links{
-   padding-left: 20px;
-   padding-right: 10px;
-   float:right 
+.body-composition{
+    background-color:rgb(255, 182, 232); 
 }
-
+.links{
+   padding-left: 1.5em;
+   padding-right: -1.5em;
+   float:right;
+   color: white;
+   text-decoration: none;
+}
+nav{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.find-restaurants{
+    color: white;
+    padding-left: 15vw;
+}
+.nav-links{
+    padding-right: 25vw;
+    border: 25px
+}
 .body-content{
     text-align: center;
-    color:tomato;
-    padding-top: 30vh;
+    color:white;
+    padding-top: 20vh;
+    padding-bottom: 20vh;
+    background-color:skyblue;
+    margin-top: 20vh;
+    margin-bottom: 20vh;
+    margin-left: 30vw;
+    margin-right: 30vw;
 }
-
 h3{
-    /* background-color: turquoise; */
     padding-top: 1.5em;
     font-size: small;
     font-family:Arial, Helvetica, sans-serif;
 }
-
 .navbar-items{
-    background-color:greenyellow;
-     position: fixed;
+    background-color: rgba(2, 90, 11, 0.648);
     top: 0;
     z-index: 999
 }
-
 img {
     display: inline-block;
     margin-bottom: 2px;
     margin-right: 5px;
     width: 20px;
     border-radius: 2px;
-  }
-
+}
 .search-form{
     padding-top: 3em;
 }
-
 .search-box{
     padding-bottom: 20px;
 }
-
 .form-star{
     display: inline
 }
-
 .restaurant-details-div{
     padding-top: 3em;
 }
-
 .form-detail-star{
     display: inline;
 }
 .restaurant-name{
     display: inline;
-
 }
+.colored-star{
+    color: orange;
+    border-color: white;
+}
+
+  /* above all works good */
