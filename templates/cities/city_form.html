@@ -8,8 +8,9 @@
         <p>{{msg}}</p>
     {% endfor %}
 
-    <form action="/restaurants">
-        <input type="text" name="city" placeholder="city name" />
+    <form action="/restaurants" class="search-form">
+        <div class="search-box"><label for="search">Enter city and state for better search result.</label></div>
+        <input id="search" type="text" name="city" placeholder="city name" />
         <button>Submit</button>
     </form>
 

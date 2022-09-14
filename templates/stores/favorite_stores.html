@@ -4,24 +4,24 @@
 
 {% block content %}
 
-    <h1> This is a favorite store page </h1>
+    <h3> Your favorite stores </h3>
 
     {% for store in store_array %}
         <ul>
             <li>
                 <!-- needs styling here -->
-                {{ store['name'] }}:
+                {{ store['name'] }}: 
+
+                <form class="form-star" action="/favorite/delete/{{store['id']}}" method="POST">
+                    <button class="btn btn-sm {{'btn-primary'}}"> <i class="fa fa-star fa-1x"></i> </button> 
+                </form>
+
                 <ul>
                 <li>Phone:{{store['phone']}}</li>
                 <li>Address:{{store['address']}}</li>
                 </ul>
             </li>
         </ul>
-
-        <form action="/favorite/delete/{{store['id']}}" method="POST">
-
-            <button>Remove from favorite list</button>
-        </form>
 
     {% endfor %}
 
