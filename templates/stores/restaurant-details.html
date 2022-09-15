@@ -6,7 +6,6 @@
         {% for message in get_flashed_messages() %}
             <p class="already-in-list">{{message}}</p>
         {% endfor %}
-
         <div class="restaurant-details-div">
             <p class="restaurant-name">
                 Name of Restaurant: {{ store_data['name'] }}
@@ -17,7 +16,6 @@
             </p>
             <p>Phone number: {{ store_data['display_phone'] }}</p>
             <p>Address: {{ address }}</p>
-
             {% if hours_unavailable == -1 %}
                 <p>Hours of Operation: </p>
                 <ul>
