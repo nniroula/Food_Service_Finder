@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
-
 {% block title %} City Names {% endblock %}
 
 {% block content %}
-
-    {% for msg in get_flashed_messages() %}
-        <p>{{msg}}</p>
-    {% endfor %}
-
-    <form action="/restaurants" class="search-form">
-        <div class="search-box"><label for="search">Enter city and state for better search result.</label></div>
-        <input id="search" type="text" name="city" placeholder="city name" />
-        <button>Submit</button>
-    </form>
-
+    <div class="restaurant-details"> 
+        {% for msg in get_flashed_messages() %}
+            <p class="login-message">{{msg}}</p>
+        {% endfor %}
+        <form action="/restaurants" class="search-form">
+            <div class="search-box"><label for="search">Enter city and state to search for local restaurants.</label></div>
+            <label for="search">City and State</label>
+            <input id="search" type="text" name="city" placeholder="Enter city and state for your search" required/>
+            <div>
+                <button id="search-button" class="btn btn-sm {{'btn-success'}}"> Search</button> 
+            </div>
+        </form>
+    </div>
 {% endblock %} 
 
 
