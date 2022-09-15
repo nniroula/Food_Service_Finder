@@ -1,35 +1,25 @@
 {% extends 'base.html' %}
-
 {% block title %} Favorite store Page {% endblock %}
 
 {% block content %}
-<div class="restaurant-details"> 
-
-    <!-- <h3> Your favorite stores </h3> -->
-    <h4 class="fav-stores-heading">Your Favorite Stores</h4>
-
-    {% for store in store_array %}
-        <ul id="fav-store-list">
-            <li>
-                <!-- needs styling here -->
-                {{ store['name'] }}: 
-
-                <form class="form-star" action="/favorite/delete/{{store['id']}}" method="POST">
-                    <!-- <button class="btn btn-sm {{'btn-primary'}}"> <i class="fa fa-star fa-1x"></i> </button>  -->
-                    <button class="btn btn-outline-light"> <span class="fa fa-star colored-star fa-1.5x"></span> </button> 
-                </form>
-                <ul>
-                    <li>Phone: {{store['phone']}}</li>
-                    <li>Address: {{store['address']}}</li>
-                </ul>
-            </li>
-        </ul>
-
-    {% endfor %}
-
+    <div class="restaurant-details"> 
+        <h4 class="fav-stores-heading">Your Favorite Stores</h4>
+        {% for store in store_array %}
+            <ul id="fav-store-list">
+                <li>
+                    {{ store['name'] }}: 
+                    <form class="form-star" action="/favorite/delete/{{store['id']}}" method="POST">
+                        <!-- <button class="btn btn-sm {{'btn-primary'}}"> <i class="fa fa-star fa-1x"></i> </button>  -->
+                        <button class="btn btn-outline-light"> <span class="fa fa-star colored-star fa-1.5x"></span> </button> 
+                    </form>
+                    <ul>
+                        <li>Phone: {{store['phone']}}</li>
+                        <li>Address: {{store['address']}}</li>
+                    </ul>
+                </li>
+            </ul>
+        {% endfor %}
     </div>
-
-  
 {% endblock %}
 
 
