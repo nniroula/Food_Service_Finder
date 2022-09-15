@@ -21,8 +21,6 @@ app.config['SQLALCHEMY_ECHO'] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 
-
-# FOR TESTING, comment out debug, Uncomment after testing
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -46,10 +44,14 @@ def generate_random_list_of_items(arrayOfItems):
 
 
 def alphabetic_name(name):
+    """ Returns True if all the characters in a user input are alphabets. """
+
     alphabet_only_name = name.isalpha()
     return alphabet_only_name 
 
 def alphanumeric_username(username):
+    """ Returns True if the characters in username are either alphabet, numbers, or both. """
+
     only_alphanumeric_username = username.isalnum()
     return only_alphanumeric_username 
 
@@ -149,9 +151,7 @@ def login():
         else:
             if user:
                 session["current_user_id"] = user.id
-        
                 flash(f"Hello, {user.username}!, you are logged in.")
-                flash('Enter city and state to search for local restaurants.')
                 return redirect('/search')
             flash("Invalid password! Please enter a valid password.")
             return render_template('/users/login_form.html', form = form)
@@ -173,50 +173,54 @@ def show_food_service_providers_from_api():
     """ Take in user input of the city and render all restaurants from the external api in the browser based on the user input """
 
     headers= {"Authorization": f"Bearer {api_key}" }
-    city_name = request.args['city']
-    NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}&term=Restaurant'
-    api_response = requests.get(NEEDED_API_URL, headers= headers)
-    api_data = api_response.json()
-    api_stores_object = api_data['businesses']
+    try:
+        city_name = request.args['city']
+        NEEDED_API_URL = f'{BASE_URL}{BUSINESS_ENDPOINT}?location={city_name}&term=Restaurant'
+        api_response = requests.get(NEEDED_API_URL, headers= headers)
+        api_data = api_response.json()
+        api_stores_object = api_data['businesses']
+    except KeyError:
+        flash('Invalid input! Please try again.')
+        return render_template('/cities/city_form.html')
+    else:
+        suggested_stores_array, other_stores_array = [], []
 
-    suggested_stores_array, other_stores_array = [], []
-
-    for store in api_stores_object:
-        suggested_stores_object, other_stores_object = {}, {}
-  
-        if store['rating'] >= RATING:
-            suggested_stores_object['name'] = store['name']
-            suggested_stores_object['id'] = store['id']
-            suggested_stores_array .append(suggested_stores_object)
-        else:
-            other_stores_object['name'] = store['name']
-            other_stores_object['id'] = store['id']
-            other_stores_array.append(other_stores_object)
-        
-    length_of_suggested_stores_array = len(suggested_stores_array)
-    length_of_other_stores_array = len(other_stores_array)
-
-    if length_of_suggested_stores_array > 12:
-        list_of_randomly_selected_suggested_restaurants = generate_random_list_of_items(suggested_stores_array)
-        suggested_stores_array.clear()
-
-        for restaurant in list_of_randomly_selected_suggested_restaurants:
-            suggested_stores_array.append(restaurant)
+        for store in api_stores_object:
+            suggested_stores_object, other_stores_object = {}, {}
     
-    if length_of_other_stores_array > 12:
-        list_of_randomly_selected_other_restaurants = generate_random_list_of_items(other_stores_array)
-        other_stores_array.clear()
+            if store['rating'] >= RATING:
+                suggested_stores_object['name'] = store['name']
+                suggested_stores_object['id'] = store['id']
+                suggested_stores_array .append(suggested_stores_object)
+            else:
+                other_stores_object['name'] = store['name']
+                other_stores_object['id'] = store['id']
+                other_stores_array.append(other_stores_object)
+            
+        length_of_suggested_stores_array = len(suggested_stores_array)
+        length_of_other_stores_array = len(other_stores_array)
 
-        for restaurant in list_of_randomly_selected_other_restaurants:
-            other_stores_array.append(restaurant)
+        if length_of_suggested_stores_array > 12:
+            list_of_randomly_selected_suggested_restaurants = generate_random_list_of_items(suggested_stores_array)
+            suggested_stores_array.clear()
 
-    return render_template('/stores/food_providers.html', 
-                            suggested_stores_array = suggested_stores_array,
-                            other_stores_array = other_stores_array,  
-                            length_of_suggested_stores_array = length_of_suggested_stores_array,
-                            length_of_other_stores = length_of_other_stores_array,
-                            api_stores_object = api_stores_object,
-                        )
+            for restaurant in list_of_randomly_selected_suggested_restaurants:
+                suggested_stores_array.append(restaurant)
+        
+        if length_of_other_stores_array > 12:
+            list_of_randomly_selected_other_restaurants = generate_random_list_of_items(other_stores_array)
+            other_stores_array.clear()
+
+            for restaurant in list_of_randomly_selected_other_restaurants:
+                other_stores_array.append(restaurant)
+
+        return render_template('/stores/food_providers.html', 
+                                suggested_stores_array = suggested_stores_array,
+                                other_stores_array = other_stores_array,  
+                                length_of_suggested_stores_array = length_of_suggested_stores_array,
+                                length_of_other_stores = length_of_other_stores_array,
+                                api_stores_object = api_stores_object,
+                            )
 
 
 @app.route('/restaurant/<restaurant_id>', methods=["POST", "GET"])
@@ -425,6 +429,6 @@ def profile():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    """ add page not found error message. set the 404 status explicitly. """
+    """ Add page not found error message. set the 404 status explicitly. """
 
     return render_template('four_O_four_page.html'), 404
