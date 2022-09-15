@@ -37,7 +37,6 @@ h3{
     font-family:Arial, Helvetica, sans-serif;
 }
 .navbar-items{
-    /* position:fixed; */
     position: sticky;
     background-color: rgba(2, 90, 11, 0.648);
     top: 0;
@@ -45,12 +44,9 @@ h3{
 }
 img {
     display: inline-block;
-    /* margin-bottom: 2px; */
     margin-bottom: 2px;
     margin-right: 5px;
-    /* width: 20px; */
     width: 25px;
-    /* border-radius: 2px; */
     border-radius: 5px;
 }
 .search-form{
@@ -73,23 +69,9 @@ img {
     display: inline;
 }
 .colored-star{
-    /* color: orange; */
-    /* color: white; */
-    /* color: orange; */
     color:gold;
     /* border-color: white; */
-    border-color: red;
-    /* background-color: gold; */
 }
-.colored-star :hover{
-    background: coral;
-}
-
-  /* above all works good */
-
-
-  /* Sign up form */
-  /* .sign-up-form{ */
 .display-container{
     text-align: center;
     color:white;
@@ -100,44 +82,30 @@ img {
     margin-left: 30vw;
     margin-right: 30vw;
 }
-  /* #sign-up-title{
-    padding-top: 2.5rem;
-    padding-bottom: 2rem;
-  } */
 .page-heading{
     padding-top: 2.5rem;
     padding-bottom: 2rem;
 }
-  #signupform{
+#signupform{
     margin-top: 0.5em;
-  }
-/* .sign-up-error{ */
-/* .error-messages{ */
+}
 .messages-display{
-    color: red;
+    color: green;
     padding-bottom: 2em;
     padding-top: -1.5em;
 }
 #sign-up-button{
-/* .submit-button{ */
-/* .btn{ */
-/* .btn btn-sm { */
     float: right;
     margin-right: 4.5em;
     border-radius: 50%;
     padding:7px;
-    /* border-radius: 40%; */
 }
-
-/* login page */
 #log-in-button{
     float: right;
     margin-right: 4.5em;
     border-radius: 50%;
     padding:7px;
 }
-
-/* profile update */
 #update-button{
     float: right;
     margin-right: 4.5em;
@@ -148,25 +116,15 @@ img {
     padding-left: 4.7em;
 }
 #password-prompt{
-    /* color: green */
-    color:deeppink
+    color: green
 }
-
-/* restaurants details page */
 .restaurant-details{
-    /* text-align: center; */
-    /* justify-content: center; */
     padding-left: 10vw;
-    /* background-color:skyblue; */
-
-    /* color:white; */
     padding-bottom: 10vh;
     background-color:skyblue;
-    /* background-color:white; */
     margin-top: 10vh;
     margin-bottom: 20vh;
     margin-left: 25vw;
-    /* margin-right: 30vw; */
     margin-right: 25vw;
     color:white
 }
@@ -175,29 +133,31 @@ img {
     padding-bottom: 1px;
     color: red
 }
-
 .restaurant-links{
     color: white;
     text-decoration: none;
 }
-
 .suggested{
     margin-left: -70px;
     padding-top: 2em;
 }
-
-
 .fav-stores-heading{
     padding-top: 2.5rem;
     padding-bottom: 2rem;
     justify-content: center;
-    /* text-align: center; */
     padding-left: 7vw;
-  
 }
-
 #fav-store-list{
-    /* text-align: left; */
     margin-left: -4em;
 }
-
+.login-message{
+    color: green;
+    padding-bottom: 2em;
+    padding-top: -1.5em;
+}
+#search-button{
+    float: right;
+    margin-right: 7em;
+    border-radius: 50%;
+    padding:7px;
+}
