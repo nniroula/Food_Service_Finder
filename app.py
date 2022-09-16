@@ -91,6 +91,54 @@ def signup():
 
     form = AddAUserForm()
 
+    # if form.validate_on_submit():
+    #     try:
+    #         first_name=form.firstname.data
+    #         last_name=form.lastname.data
+    #         user_name=form.username.data
+    #         pass_word=form.password.data
+
+    #         if alphabetic_name(first_name) == False:
+                # flash("Invalid first name! It contains only letters.")
+    #             return render_template('/users/signup_form.html', form = form)
+            
+    #         if alphabetic_name(last_name) == False:
+    #             flash("Invalid last name! It contains only letters.")
+    #             return render_template('/users/signup_form.html', form = form)
+
+    #         if alphanumeric_username(user_name) == False:
+    #             flash("Invalid username! It contains only letters and numbers.")
+    #             return render_template('/users/signup_form.html', form = form)
+
+    #         existing_user = User.query.filter_by(username = user_name).first()
+    #         not_existing_user = existing_user == None
+
+    #         if not_existing_user == True:
+    #             user = User.signup(first_name, last_name, user_name, pass_word)
+
+    #             db.session.add(user)
+    #             db.session.commit()
+
+    #             flash('Signed up successfully!')
+    #             flash('Please login to verify your credentials')
+    #             return redirect("/login")
+    #         else:
+    #             flash("Username already taken.")
+    #             flash("Please signup with a different username.")
+    #             return render_template('users/signup_form.html', form=form)
+
+    #     except IntegrityError:
+    #         return render_template('users/signup_form.html', form=form)
+  
+    # return render_template('/users/signup_form.html', form = form)
+
+
+    # addition
+    # error_messages = {}
+    # suggested_stores_object['name'] = store['name']
+
+    valid_input = True
+    # above is addition
     if form.validate_on_submit():
         try:
             first_name=form.firstname.data
@@ -98,34 +146,46 @@ def signup():
             user_name=form.username.data
             pass_word=form.password.data
 
-            if alphabetic_name(first_name) == False:
-                flash("Invalid first name! It contains only letters.")
-                return render_template('/users/signup_form.html', form = form)
-            
-            if alphabetic_name(last_name) == False:
-                flash("Invalid last name! It contains only letters.")
-                return render_template('/users/signup_form.html', form = form)
-
-            if alphanumeric_username(user_name) == False:
-                flash("Invalid username! It contains only letters and numbers.")
-                return render_template('/users/signup_form.html', form = form)
-
             existing_user = User.query.filter_by(username = user_name).first()
             not_existing_user = existing_user == None
 
-            if not_existing_user == True:
-                user = User.signup(first_name, last_name, user_name, pass_word)
-
-                db.session.add(user)
-                db.session.commit()
-
-                flash('Signed up successfully!')
-                flash('Please login to verify your credentials')
-                return redirect("/login")
+            # if valid_input == True:
+            if alphabetic_name(first_name) == False:
+                first_name_error = "First name should contain only letters."
+                valid_input = False
             else:
-                flash("Username already taken.")
-                flash("Please signup with a different username.")
-                return render_template('users/signup_form.html', form=form)
+                first_name_error = ''
+            
+            if alphabetic_name(last_name) == False:
+                last_name_error = "Last name should contain only letters."
+                valid_input = False
+            else:
+                last_name_error = ''
+
+            if alphanumeric_username(user_name) == False:
+                user_name_error = "Username should contain only letters and numbers."
+                valid_input = False
+            else:
+                user_name_error = ''
+
+            if not_existing_user == False:
+                user_name_error = "Username is taken. Sign up with a different one."
+                valid_input = False
+          
+
+            if valid_input == False:
+                return render_template('/users/signup_form.html', form = form, first_name_error = first_name_error,
+                     last_name_error = last_name_error, user_name_error = user_name_error)
+
+            else:
+                if not_existing_user == True:
+                    user = User.signup(first_name, last_name, user_name, pass_word)
+
+                    db.session.add(user)
+                    db.session.commit()
+
+                    flash('Signed up successfully!')
+                    return redirect("/login")
 
         except IntegrityError:
             return render_template('users/signup_form.html', form=form)
@@ -146,15 +206,17 @@ def login():
         try:
             user = User.authenticate(user_name, pass_word)
         except:
-            flash("User does not exist! Please enter a valid user name or sign up to create an account.")
-            return render_template('/users/login_form.html', form = form)
+            # flash("User does not exist! Please enter a valid user name or sign up to create an account.")
+            invalid_user = "User does not exist! Enter a valid username."
+            return render_template('/users/login_form.html', form = form, invalid_user = invalid_user)
         else:
             if user:
                 session["current_user_id"] = user.id
                 flash(f"Hello, {user.username}!, you are logged in.")
                 return redirect('/search')
-            flash("Invalid password! Please enter a valid password.")
-            return render_template('/users/login_form.html', form = form)
+            # flash("Invalid password! Please enter a valid password.")
+            invalid_password = "Invalid password! Please try again."
+            return render_template('/users/login_form.html', form = form, invalid_password = invalid_password)
        
     return render_template('/users/login_form.html', form=form)
 
@@ -392,37 +454,90 @@ def profile():
     user = User.query.get_or_404(g.user.id)           
     form = UpdateUserProfileForm(obj = user)   
 
+    # if form.validate_on_submit():
+    #     if User.authenticate(user.username, form.password.data):
+    #         try: 
+    #             if alphabetic_name(form.firstname.data) == False:
+    #                 flash("Invalid first name! It contains only letters.")
+    #                 return render_template('/users/profile_page.html', form = form, user = user) 
+    #             else:
+    #                 user.firstname = form.firstname.data
+
+    #             if alphabetic_name(form.lastname.data) == False:
+    #                 flash("Invalid last name! It contains only letters.")
+    #                 return render_template('/users/profile_page.html', form = form, user = user) 
+    #             else:
+    #                 user.lastname = form.lastname.data
+
+    #             if alphanumeric_username(form.username.data) == False:
+    #                 flash("Invalid username! It contains only letters and numbers.")
+    #                 return render_template('/users/profile_page.html', form = form, user = user) 
+    #             else:
+    #                 user.username = form.username.data
+
+    #             db.session.commit()  
+    #             flash("Profile updated successfully!", "primary") 
+    #             return redirect('/search')
+    #         except IntegrityError:
+    #             flash('Username you are about to update is already taken!')
+    #             flash('If you really need to change your username, it must be unique.')
+    #             return render_template('/users/profile_page.html', form = form, user = user) 
+    #     else:
+    #         flash("Invalid password! You are unauthorized to update the profile.", "danger")
+    #     return render_template('/users/profile_page.html', form = form, user = user) 
+    # else:
+    #     return render_template('/users/profile_page.html', form = form, user = user)
+
+
     if form.validate_on_submit():
+        user_to_be_updated = True
+
         if User.authenticate(user.username, form.password.data):
             try: 
                 if alphabetic_name(form.firstname.data) == False:
-                    flash("Invalid first name! It contains only letters.")
-                    return render_template('/users/profile_page.html', form = form, user = user) 
+                    # flash("Invalid first name! It contains only letters.")
+                    error_in_firstname = "Invalid first name! It contains only letters."
+                    user_to_be_updated = False
+                    # return render_template('/users/profile_page.html', form = form, user = user) 
                 else:
                     user.firstname = form.firstname.data
+                    error_in_firstname = ''
 
                 if alphabetic_name(form.lastname.data) == False:
-                    flash("Invalid last name! It contains only letters.")
-                    return render_template('/users/profile_page.html', form = form, user = user) 
+                    # flash("Invalid last name! It contains only letters.")
+                    error_in_lastname = "Invalid last name! It contains only letters."
+                    user_to_be_updated = False
+                    # return render_template('/users/profile_page.html', form = form, user = user) 
                 else:
                     user.lastname = form.lastname.data
+                    error_in_lastname = ''
 
                 if alphanumeric_username(form.username.data) == False:
-                    flash("Invalid username! It contains only letters and numbers.")
-                    return render_template('/users/profile_page.html', form = form, user = user) 
+                    # flash("Invalid username! It contains only letters and numbers.")
+                    error_in_username = "Invalid username! It contains only letters and numbers."
+                    user_to_be_updated = False
+                    # return render_template('/users/profile_page.html', form = form, user = user) 
                 else:
                     user.username = form.username.data
-
-                db.session.commit()  
-                flash("Profile updated successfully!", "primary") 
-                return redirect('/search')
+                    error_in_username = ''
+                
+                if user_to_be_updated == False:
+                    return render_template('/users/profile_page.html', form = form, user = user,
+                     error_in_firstname = error_in_firstname, error_in_lastname = error_in_lastname, 
+                      error_in_username = error_in_username) 
+                else:
+                    db.session.commit()  
+                    flash("Profile updated successfully!", "primary") 
+                    return redirect('/search')
             except IntegrityError:
-                flash('Username you are about to update is already taken!')
-                flash('If you really need to change your username, it must be unique.')
-                return render_template('/users/profile_page.html', form = form, user = user) 
+                # flash('Username you are about to update is already taken!')
+                # flash('If you really need to change your username, it must be unique.')
+                error_in_username = 'Username you are about to update is already taken!'
+                return render_template('/users/profile_page.html', form = form, user = user, error_in_username = error_in_username) 
         else:
-            flash("Invalid password! You are unauthorized to update the profile.", "danger")
-        return render_template('/users/profile_page.html', form = form, user = user) 
+            # flash("Invalid password! You are unauthorized to update the profile.", "danger")
+            error_in_password = "Invalid password! You are unauthorized to update the profile."
+        return render_template('/users/profile_page.html', form = form, user = user, error_in_password = error_in_password) 
     else:
         return render_template('/users/profile_page.html', form = form, user = user)
 

@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} Profile Page {% endblock %}
 
-{% block content %}
-    <div class="display-container">
+
+    <!-- <div class="display-container">
         <h4 class="page-heading">Update Profile</h4>
         {% for msg in get_flashed_messages() %}
             <p class="messages-display">{{msg}}</p>
@@ -21,6 +21,76 @@
             <button id="update-button" class="btn btn-sm {{'btn-success'}}"> Update</button> 
             </div>
         </form>
+    </div> -->
+
+
+{% block content %}
+    <div class="display-container">
+        <h4 class="page-heading">Update Profile</h4>
+        {% for msg in get_flashed_messages() %}
+            <p class="messages-display">{{msg}}</p>
+        {% endfor %}
+        <form method="POST" id="user_form">
+            {{ form.hidden_tag() }}
+            <!-- {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+                <p>
+                    {{ field.label }}
+                    {{ field(placeholder=field.label.text) }}
+                </p>
+            {% endfor %} -->
+
+            {% if form.firstname.widget.input_type != 'hidden' %}
+                <p>
+                    <p class="form-fields"> 
+                        {{ form.firstname.label }}
+                        {{ form.firstname(placeholder=form.firstname.label.text) }}
+                    
+                    <div class="text-danger">{{ error_in_firstname }}</div>  
+                    </p>        
+                </p>
+            {% endif %}
+
+            {% if form.lastname.widget.input_type != 'hidden' %}
+            <p>
+                <p class="form-fields"> 
+                    {{ form.lastname.label }}
+                    {{ form.lastname(placeholder=form.lastname.label.text) }}
+                
+                <div class="text-danger">{{ error_in_lastname }}</div>  
+                </p>        
+            </p>
+        {% endif %}
+
+        {% if form.username.widget.input_type != 'hidden' %}
+            <p>
+                <p class="form-fields"> 
+                    {{ form.username.label }}
+                    {{ form.username(placeholder=form.username.label.text) }}
+                <div class="text-danger">{{ error_in_username }}</div>  
+                </p>        
+            </p>
+        {% endif %}
+        
+
+        {% if form.password.widget.input_type != 'hidden' %}
+        <p id="password-prompt">To update credentials, please enter your password.</p>
+            <p>
+                <p class="form-fields"> 
+                    {{ form.password.label }}
+                    {{ form.password(placeholder="Enter your password") }}
+                    <div class="text-danger">{{ error_in_password }}</div>  
+                </p>        
+            </p>
+        {% endif %}
+         
+            <!-- <p id="password-prompt">To update credentials, please enter your password.</p>
+            <p id="password-field">{{ form.password(placeholder="Enter your password to confirm") }}</p> -->
+            <div>
+            <button id="update-button" class="btn btn-sm {{'btn-success'}}"> Update</button> 
+            </div>
+        </form>
     </div>
 {% endblock %}
 
+
+<!--  -->

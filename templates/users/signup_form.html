@@ -9,15 +9,58 @@
         {% endfor %}
         <form id="signupform" method="POST">
             {{ form.hidden_tag() }}
-            {% for field in form if field.widget.input_type != 'hidden' %}
+ 
+            {% if form.firstname.widget.input_type != 'hidden' %}
                 <p>
-                    {{ field.label }}
-                    {{ field }}
+                   <p class="form-fields"> 
+                        {{ form.firstname.label }}
+                        {{ form.firstname }} 
+                    </p>
+                    <div class="text-danger">{{first_name_error}}</div>           
                 </p>
-            {% endfor %}
-            <button id="sign-up-button" class="btn btn-sm {{'btn-success'}}"> Sign up</button> 
+            {% endif %}
+
+            {% if form.lastname.widget.input_type != 'hidden' %}
+                <p>
+                    <p class="form-fields"> 
+                        {{ form.lastname.label }}
+                        {{ form.lastname }} 
+                    </p>
+                    <div class="text-danger">{{ last_name_error }}</div>
+                </p>
+            {% endif %}
+
+            {% if form.username.widget.input_type != 'hidden' %}
+                <p>
+                    <p class="form-fields">
+                        {{ form.username.label }}
+                        {{ form.username }}
+                    </p>
+                    <div class="text-danger">{{ user_name_error }}</div>
+                </p>
+                {% endif %}
+
+                {% if form.password.widget.input_type != 'hidden' %}
+                <p>
+                    <p class="form-fields">
+                        {{ form.password.label }}
+                        {{ form.password }}
+                    </p>
+                    <!-- <div class="text-danger">{{ password_error }}</div> -->
+                </p>
+                {% endif %}
+
+            <button id="sign-up-button" class="btn btn-sm {{'btn-success'}}"> Sign up</button>
         </form>
     </div>
 {% endblock %}
+
+
+
+
+
+
+
+
 
 
