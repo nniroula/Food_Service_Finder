@@ -9,7 +9,6 @@
         {% endfor %}
         <form id="signupform" method="POST">
             {{ form.hidden_tag() }}
- 
             {% if form.firstname.widget.input_type != 'hidden' %}
                 <p>
                    <p class="form-fields"> 
@@ -19,7 +18,6 @@
                     <div class="text-danger">{{first_name_error}}</div>           
                 </p>
             {% endif %}
-
             {% if form.lastname.widget.input_type != 'hidden' %}
                 <p>
                     <p class="form-fields"> 
@@ -29,7 +27,6 @@
                     <div class="text-danger">{{ last_name_error }}</div>
                 </p>
             {% endif %}
-
             {% if form.username.widget.input_type != 'hidden' %}
                 <p>
                     <p class="form-fields">
@@ -39,17 +36,14 @@
                     <div class="text-danger">{{ user_name_error }}</div>
                 </p>
                 {% endif %}
-
                 {% if form.password.widget.input_type != 'hidden' %}
                 <p>
                     <p class="form-fields">
                         {{ form.password.label }}
                         {{ form.password }}
                     </p>
-                    <!-- <div class="text-danger">{{ password_error }}</div> -->
                 </p>
-                {% endif %}
-
+            {% endif %}
             <button id="sign-up-button" class="btn btn-sm {{'btn-success'}}"> Sign up</button>
         </form>
     </div>
