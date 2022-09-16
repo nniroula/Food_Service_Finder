@@ -1,4 +1,4 @@
-"""User model tests."""
+""" User modal tests."""
 
 import os
 from unittest import TestCase
@@ -8,7 +8,6 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 
 os.environ['DATABASE_URL'] = "postgresql:///test_db"
-# Now import app
 from app import app
 
 db.create_all()
@@ -20,7 +19,6 @@ class UserModelTestCase(TestCase):
     def setUp(self):
         """Create test client, and add some sample data."""
 
-        # clean up existing users
         User.query.delete()
 
         self.client = app.test_client()
