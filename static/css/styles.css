@@ -17,7 +17,6 @@ nav{
     padding-left: 15vw;
 }
 .nav-links{
-    /* padding-right: 25vw; */
     padding-right: 15vw;
     border: 25px
 }
@@ -26,11 +25,11 @@ nav{
     color:white;
     padding-top: 20vh;
     padding-bottom: 20vh;
-    background-color:skyblue;
-    margin-top: 20vh;
+    background-color: #0ac6ec;
     margin-bottom: 20vh;
     margin-left: 30vw;
     margin-right: 30vw;
+    margin-top: 10vh;
 }
 h3{
     padding-top: 1.5em;
@@ -71,14 +70,13 @@ img {
 }
 .colored-star{
     color:gold;
-    /* border-color: white; */
+    font-size: 36px;
 }
 .display-container{
     text-align: center;
     color:white;
     padding-bottom: 10vh;
-    background-color:skyblue;
-    /* margin-top: 20vh; */
+    background-color: #0ac6ec;
     margin-top: 10vh;
     margin-bottom: 20vh;
     margin-left: 30vw;
@@ -86,7 +84,6 @@ img {
 }
 .page-heading{
     padding-top: 2.5rem;
-    /* padding-bottom: 2rem; */
     padding-bottom: .5rem;
 }
 #signupform{
@@ -95,11 +92,7 @@ img {
 .messages-display{
     color: green;
     padding-bottom: 2em;
-    /* padding-bottom: -2em; */
     padding-top: -1.5em;
-    /* padding-top: 1.5em; */
-    /* margin-top: 5px */
-    /* margin-bottom: 2em */
 }
 #sign-up-button{
     float: right;
@@ -124,21 +117,19 @@ img {
     padding-left: 4.7em;
 }
 #password-prompt{
-    /* color: green; */
     color:blueviolet;
     margin-top: 3em;
-    /* margin-bottom: -2em */
     margin-bottom: -2.7em
 }
 .restaurant-details{
     padding-left: 10vw;
     padding-bottom: 10vh;
-    background-color:skyblue;
     margin-top: 10vh;
     margin-bottom: 20vh;
     margin-left: 25vw;
     margin-right: 25vw;
-    color:white
+    color:white;
+    background-color: #0ac6ec
 }
 .already-in-list{
     padding-top: 2em;
@@ -165,7 +156,6 @@ img {
 .login-message{
     color: green;
     padding-bottom: 2em;
-    /* padding-top: -1.5em; */
     margin-bottom: -2em;
     padding-top: 2em;
 }
@@ -178,19 +168,18 @@ img {
 #four-o-four-to-home{
     text-decoration: none;
 }
-
-
-/* sign up */
-
 .text-danger{
     margin-left: 25px;
     margin-top: -1.2em;
     margin-bottom: -1.2rem
 }
 .form-fields{
-    /* margin-bottom: -3rem;  changes the layout of the form fields */
     padding-top: 2em;
     justify-content: left;
     margin-left: -9.5em;
 }
+.non-colored-star{
+    color: grey
+}
+
 
