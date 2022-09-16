@@ -15,6 +15,7 @@ nav{
 .find-restaurants{
     color: white;
     padding-left: 15vw;
+    text-decoration: none;
 }
 .nav-links{
     padding-right: 15vw;
