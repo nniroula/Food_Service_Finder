@@ -6,7 +6,6 @@ from app import db
 db.drop_all()
 db.create_all()
 
-# empty all the tables if they are not empty in modal classes
 User.query.delete()
 FavoriteStores.query.delete()
 
