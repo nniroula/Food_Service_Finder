@@ -2,16 +2,12 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, Length, InputRequired
+from wtforms.validators import Length, InputRequired
 
 
 class AddAUserForm(FlaskForm):
     """ create a class to take in user input for signing up the user. """
 
-    # firstname = StringField("First Name", validators=[DataRequired()])
-    # lastname = StringField("Last Name", validators=[DataRequired()])
-    # username = StringField('Username', validators=[DataRequired()])
-    # password = PasswordField('Password', validators=[Length(min=6)])
     firstname = StringField("First Name", validators=[InputRequired(message="First name should contain only letters and cannot be blank.")])
     lastname = StringField("Last Name", validators=[InputRequired(message="Last name should contain only letters and cannot be blank.")])
     username = StringField('Username', validators=[InputRequired(message="Username can have only letters and numbers.")])
