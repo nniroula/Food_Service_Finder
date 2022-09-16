@@ -1,25 +1,6 @@
 {% extends 'base.html' %}
 {% block title %} Login Page {% endblock %}
 
-<!-- 
-    <div class="display-container">
-        <h4 class="page-heading">Please login</h4>
-        {% for msg in get_flashed_messages() %}
-            <p class="messages-display">{{msg}}</p>
-        {% endfor %}
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            {% for field in form if field.widget.input_type != 'hidden' %}
-                <p>
-                    {{ field.label }}
-                    {{ field(placeholder=field.label.text) }}
-                </p>
-            {% endfor %}
-            <button id="log-in-button" class="btn btn-sm {{'btn-success'}}"> Log in</button> 
-        </form> 
-    </div> -->
-
-
 {% block content %}
     <div class="display-container">
         <h4 class="page-heading">Please login</h4>
@@ -37,7 +18,6 @@
                 <div class="text-danger">{{ invalid_user }}</div>
             </p>
             {% endif %}
-
             {% if form.password.widget.input_type != 'hidden' %}
             <p>
                 <p class="form-fields">
