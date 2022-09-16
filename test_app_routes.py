@@ -72,7 +72,7 @@ class UserViewsTestCase(TestCase):
             html = res.get_data(as_text=True)
 
             self.assertEqual(res.status_code, 200)
-            self.assertIn('<h4>Please login</h4>', html)
+            self.assertIn('<h4 class="page-heading">Please login</h4>', html)
 
 
     def test_logout(self):
