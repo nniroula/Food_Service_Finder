@@ -26,8 +26,6 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-# api_key = API_SECRET_KEY working version
-
 os.environ['API_PASSCODE'] = API_SECRET_KEY
 api_key = os.environ.get('API_PASSCODE')
 
@@ -60,8 +58,7 @@ def alphanumeric_username(username):
     return only_alphanumeric_username 
 
 
-# @app.route('/')
-@app.route('/home')
+@app.route('/')
 def home():
     """ renders the base url of the local restaurants finder web app."""
 
@@ -74,7 +71,7 @@ def search_restaurants():
 
     if  "current_user_id" not in session:
         flash("You must be logged in to search for restaurants.")
-        return redirect('/home')
+        return redirect('/')
     else:
         return render_template('/cities/city_form.html')
 
@@ -403,7 +400,7 @@ def profile():
     """ Updates user profile for current user. Avoid passing/updating password here. """
 
     if 'current_user_id' not in session:
-        return redirect('/home')
+        return redirect('/')
 
     user = User.query.get_or_404(g.user.id)           
     form = UpdateUserProfileForm(obj = user)   
