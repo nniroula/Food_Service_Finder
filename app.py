@@ -15,7 +15,7 @@ USER_ID_IN_ACTION = -1
 
 app = Flask(__name__)  
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///restaurants_db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('HEROKU_POSTGRESQL_PURPLE_URL', 'postgresql:///restaurants_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
@@ -26,8 +26,8 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-# api_key = os.environ.get('API_SECRET_KEY')
-app.config['api_key'] = os.environ.get('API_SECRET_KEY')
+api_key = os.environ.get('API_SECRET_KEY')
+# app.config['api_key'] = os.environ.get('API_SECRET_KEY')
 BASE_URL = 'https://api.yelp.com/v3'
 BUSINESS_ENDPOINT = '/businesses/search'
 RATING = 2.5
