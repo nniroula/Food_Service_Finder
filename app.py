@@ -60,7 +60,8 @@ def alphanumeric_username(username):
     return only_alphanumeric_username 
 
 
-@app.route('/')
+# @app.route('/')
+@app.route('/home')
 def home():
     """ renders the base url of the local restaurants finder web app."""
 
@@ -73,7 +74,7 @@ def search_restaurants():
 
     if  "current_user_id" not in session:
         flash("You must be logged in to search for restaurants.")
-        return redirect('/')
+        return redirect('/home')
     else:
         return render_template('/cities/city_form.html')
 
@@ -402,7 +403,7 @@ def profile():
     """ Updates user profile for current user. Avoid passing/updating password here. """
 
     if 'current_user_id' not in session:
-        return redirect('/')
+        return redirect('/home')
 
     user = User.query.get_or_404(g.user.id)           
     form = UpdateUserProfileForm(obj = user)   
