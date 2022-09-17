@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
-from secret import API_SECRET_KEY
+# from secret import API_SECRET_KEY
 from models import FavoriteStores, db, connect_db, User
 from forms import AddAUserForm, LoginForm, UpdateUserProfileForm
 from flask_bcrypt import Bcrypt
@@ -26,8 +26,10 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-os.environ['API_PASSCODE'] = API_SECRET_KEY
-api_key = os.environ.get('API_PASSCODE')
+# os.environ['API_PASSCODE'] = API_SECRET_KEY
+# api_key = os.environ.get('API_PASSCODE')
+# os.environ['API_PASSCODE'] = API_SECRET_KEY
+api_key = os.environ.get('API_SECRET_KEY')
 
 BASE_URL = 'https://api.yelp.com/v3'
 BUSINESS_ENDPOINT = '/businesses/search'
