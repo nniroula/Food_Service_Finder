@@ -26,9 +26,11 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-# api_key = os.environ.get('API_SECRET_KEY')
-# app.config['api_key'] = os.environ.get('API_SECRET_KEY')
-api_key = os.getenv("API_KEY")
+# api_key = API_SECRET_KEY working version
+
+os.environ['API_PASSCODE'] = API_SECRET_KEY
+api_key = os.environ.get('API_PASSCODE')
+
 BASE_URL = 'https://api.yelp.com/v3'
 BUSINESS_ENDPOINT = '/businesses/search'
 RATING = 2.5
