@@ -15,11 +15,11 @@ USER_ID_IN_ACTION = -1
 
 app = Flask(__name__)  
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///restaurants_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "itsasecrettoalldevs")
 
 debug = DebugToolbarExtension(app)
 
