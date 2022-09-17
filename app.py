@@ -24,7 +24,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "itsasecrettoalldevs")
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
-db.create_all()
+# db.create_all()
 
 # os.environ['API_PASSCODE'] = API_SECRET_KEY
 # api_key = os.environ.get('API_PASSCODE')
