@@ -83,6 +83,7 @@ If you want to simultaneously check what is being added/updated in your database
 
 ### E. Deployment
 This is project is deployed to the Heroku with the following link:
+https://local-restaurants-finder.herokuapp.com/ 
 
 
 
