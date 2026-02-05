@@ -2,22 +2,22 @@
 ## Local Restaurants Finder web app
 
 ### Description
-During the COVID 19 pandemic, people were scared going out for hunting restaurants to eat. I decided to solve this problem by creating a full-stack web app to provide the list of local food servicers on a single click so that it provides information on what food item each restaurant has, the phone number to call them and their location. Based on the state and the city name, people would be able to find local food service providers. The app allows them to create a free account for saving, deleting, updating or retrieving restaurant information and its services. The data about each business is sourced through integrating an external API. Users can update their profile information. It was originally deployed to the cloud and currently taken down. 
+During the COVID 19 pandemic, people were scared going out for hunting restaurants to eat. I decided to solve this problem by creating a full-stack web app to provide the list of local food servicers on a single click so that it provides information on what food item each restaurant has, the phone number to call them and their location. Based on the state and the city name, people would be able to find local food service providers. The app allows them to create a free account for saving, deleting, updating or retrieving restaurant information and its services. The data about each business is sourced through integrating an external API. This app was originally deployed to the cloud and currently taken down. 
 
 ### Tech Stack used include the following
-Python 3.7
-Flask
-JavaScript
-HTML5
-CSS3
-PostgreSQL Relational Database management system
-BCrypt for password hasing
-Pip3
-Flask_SQLAlchemy
-Flask_wtf (Flask What The Form)
-Psycopg-2
-PostgreSQL
-Jinja2 templates
+Python 3.7 <br>
+Flask <br>
+JavaScript <br>
+HTML5 <br>
+CSS3 <br>
+PostgreSQL  <br>
+BCrypt for password hasing <br>
+Pip3 <br>
+Flask_SQLAlchemy <br>
+Flask_wtf (Flask What The Form) <br>
+Psycopg-2 <br>
+PostgreSQL <br>
+Jinja2 templates <br>
 Bootstrap
 
 <br>
