@@ -1,11 +1,30 @@
 
-# Local Restaurants Finder web app
+## Local Restaurants Finder web app
 
 ### Description
-This app can be used to find local restaurants based on the city and state. It is build using the yelp Fusion API. It recommends a list of tweleve random restaurants at maximum at a time. If there are any other restaurants other than those meeting the recommendation criteria, then those restaurants will be displayed under the heading "other restaurants to explore" at maximum 12 at a time. Since the external API used in the project provides upto 1000 local businesses at a time, it is impossible to render them all at a time. So, at maximum 24 store's name will be render on the restaurants provider page on a single search.
+During the COVID 19 pandemic, people were scared going out for hunting restaurants to eat. I decided to solve this problem by creating a full-stack web app to provide the list of local food servicers on a single click so that it provides information on what food item each restaurant has, the phone number to call them and their location. Based on the state and the city name, people would be able to find local food service providers. The app allows them to create a free account for saving, deleting, updating or retrieving restaurant information and its services. The data about each business is sourced through integrating an external API. Users can update their profile information. It was originally deployed to the cloud and currently taken down. 
+
+### Tech Stack used include the following
+Python 3.7
+Flask
+JavaScript
+HTML5
+CSS3
+PostgreSQL Relational Database management system
+BCrypt for password hasing
+Pip3
+Flask_SQLAlchemy
+Flask_wtf (Flask What The Form)
+Psycopg-2
+PostgreSQL
+Jinja2 templates
+Bootstrap
 
 <br>
+### Usage
+This app can be used to find local restaurants based on the city and state. It recommends a list of tweleve random restaurants at maximum at a time. If there are any other restaurants other than those meeting the recommendation criteria, then those restaurants will be displayed under the heading "other restaurants to explore". Since an external data sourcing API integrated in the project provides upto 1000 local businesses at a time, it is impossible to display them all at once. So, at maximum 24 store's name will be render on the restaurants provider page on a single search.
 
+<br>
 ### User interfacing
 - The first time user has to sign up for an account. Once signed up, you will be directed to the login page where you have to login to verify your credentials. The recurring user can click on login button to login to the site. 
 - Once logged in, you will have the option to search for the local restaurants. 
@@ -13,13 +32,7 @@ This app can be used to find local restaurants based on the city and state. It i
 - Clicking on the restaurant name would render the details about that restaurant. The details include the restaurant name, phone number, address, and hours of operation. The datails page gives a user the option to like that restaurant. If clicked on the star to like the restaurant, a user will be redirected to the favorite stores list page. Here, a user will be able to see the stores that are liked. This page provides an option(or star) to dislike the store if a logged in user wishes to do so. If disliked a store, a user will still be on the same page. The navbar gives different options to either search for other stores, go to the home page, or logout. 
 - The store in a favorite store list shows only the name, phone number, and the address.
 - The profile icon gives an option for the logged in user to update the profile information.
-- while on the restaurants provider page, if a user does not like recommended 12 restaurants, then the user can refresh the page to retrieve another set of 12 recommend or non-recommended restaurants.
-
-<br>
-
-
-### Tech Stack
-Flask, Python, Flask_SQLAlchemy, Flask_wtf (Flask What The Form), Psycopg-2, PostgreSQL, Jinja2 templates, HTML5, CSS, Bootstrap
+- while on the restaurants provider page, if a user does not like recommended 12 restaurants, then the user can refresh the page to retrieve another set of 12 restaurants.
 
 <br>
 
