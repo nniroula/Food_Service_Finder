@@ -19,12 +19,12 @@ Psycopg-2 <br>
 PostgreSQL <br>
 Jinja2 templates <br>
 Bootstrap
-
 <br>
+
 ### Usage
 This app can be used to find local restaurants based on the city and state. It recommends a list of tweleve random restaurants at maximum at a time. If there are any other restaurants other than those meeting the recommendation criteria, then those restaurants will be displayed under the heading "other restaurants to explore". Since an external data sourcing API integrated in the project provides upto 1000 local businesses at a time, it is impossible to display them all at once. So, at maximum 24 store's name will be render on the restaurants provider page on a single search.
-
 <br>
+
 ### User interfacing
 - The first time user has to sign up for an account. Once signed up, you will be directed to the login page where you have to login to verify your credentials. The recurring user can click on login button to login to the site. 
 - Once logged in, you will have the option to search for the local restaurants. 
@@ -33,11 +33,9 @@ This app can be used to find local restaurants based on the city and state. It r
 - The store in a favorite store list shows only the name, phone number, and the address.
 - The profile icon gives an option for the logged in user to update the profile information.
 - while on the restaurants provider page, if a user does not like recommended 12 restaurants, then the user can refresh the page to retrieve another set of 12 restaurants.
-
 <br>
 
 ### API endpoints from yelp fusion api that are used in the project are as followings:
-
 1. Base URL:- <br>
     https://api.yelp.com/v3 <br>
 
@@ -49,20 +47,17 @@ This app can be used to find local restaurants based on the city and state. It r
 
 4. To get local stores based on the lacation parameter, and the category <br>
     Base URL/Busineses search endpoint?location=cityName&term=Restaurant
-
 <br>
 
 ### Relational tables:
-
 users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; favorite_stores <br>
----------------------------------------------------------------------------
+---------------------------------------
 id [PK]&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id [PK]<br>
 first_name &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name_of_store <br>
 last_name   &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_id [FK]<br>
 password &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
 phone number&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
 image_url &nbsp;&nbsp; &nbsp;
-<br>
 <br>
 
 ## To simulate the project from scratch:
@@ -95,7 +90,7 @@ If you want to simultaneously check what is being added/updated in your database
 3.  ```\dt+``` to check for the relational tables
 4.  ```select * from table_name```. For example ```select * from users``` or ``` select * from someother table name``` to check what the table contains
 
-### E. Deployment
+### E. Deployed Website URL
 This is project is deployed to the Heroku with the following link:
 https://local-restaurants-finder.herokuapp.com/ 
 
